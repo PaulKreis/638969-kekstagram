@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Павел Крейс](https://up.htmlacademy.ru/javascript/14/user/638969).
-* Наставник: `Неизвестно`.
+* Наставник: [Вадим Протасов](https://htmlacademy.ru/profile/id616879).
 
 ---
 
