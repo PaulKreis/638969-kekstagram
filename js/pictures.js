@@ -69,18 +69,19 @@ var generatePhotos = function (photoNumber) {
   return photos;
 };
 
-var renderPhotos = function (photoNumber, photos) {
+var renderPhotos = function (photos) {
   var pictureTemplate = document.querySelector('#picture').content;
   var pictureGridElement = document.querySelector('.pictures');
   var picturesFragment = document.createDocumentFragment();
-
-  for (var i = 0; i < photoNumber; i++) {
+  var i = 0;
+  photos.forEach(function () {
     var pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = photos[i].url;
     pictureElement.querySelector('.picture__stat--likes').textContent = photos[i].likes;
     pictureElement.querySelector('.picture__stat--comments').textContent = photos[i].comments;
     picturesFragment.appendChild(pictureElement);
-  }
+    i++;
+  });
   pictureGridElement.appendChild(picturesFragment);
   return photos;
 };
@@ -104,8 +105,6 @@ var renderBigPicture = function (picture) {
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   bigPictureElement.querySelector('.social__caption').textContent = picture.description;
 
-  renderComments(picture);
-
   //  Прячем блоки счётчика комментариев и загрузки новых комментариев
   var commentCountElement = document.querySelector('.social__comment-count');
   commentCountElement.classList.add('visually-hidden');
@@ -116,8 +115,9 @@ var renderBigPicture = function (picture) {
 
 var initPage = function () {
   var photos = generatePhotos(PHOTO_NUMBER);
-  renderPhotos(PHOTO_NUMBER, photos);
+  renderPhotos(photos);
   renderBigPicture(photos[0]);
+  renderComments(photos[0]);
 };
 
 initPage();
