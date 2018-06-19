@@ -101,22 +101,32 @@ var renderPhotos = function (photos) {
 };
 
 //  Работа с комментариями
-var createCommentTemplate = function () {
-  return document.querySelector('.social__comment');
+var createCommentElement = function (comment) {
+  var commentElement = document.createElement('li');
+  commentElement.className = 'social__comment';
+  var img = document.createElement('img');
+  img.className = 'social__picture';
+  img.src = getAvatarPath(getRandomInt(1, 6));
+  img.alt = 'Аватар комментатора фотографии';
+  img.width = '35';
+  img.height = '35';
+  var p = document.createElement('p');
+  p.className = 'social__text';
+  p.textContent = comment;
+
+  commentElement.appendChild(img);
+  commentElement.appendChild(p);
+
+  return commentElement;
 };
 
-var renderComment = function (comment, fragment, commentTemplate) {
-  var commentElement = commentTemplate.cloneNode(true);
-  commentElement.querySelector('.social__picture').src = getAvatarPath(getRandomInt(1, 6));
-  commentElement.querySelector('.social__text').textContent = comment;
-  fragment.appendChild(commentElement);
-};
-
-var renderComments = function (photos, commentsElement, commentTemplate) {
+var renderComments = function (photos, commentsElement) {
   var commentsFragment = document.createDocumentFragment();
+
   photos.comments.forEach(function (comment) {
-    renderComment(comment, commentsFragment, commentTemplate);
+    commentsFragment.appendChild(createCommentElement(comment, commentsElement));
   });
+
   commentsElement.appendChild(commentsFragment);
 };
 
@@ -126,7 +136,6 @@ var hideCommentsFeatures = function () {
   commentCountElement.classList.add('visually-hidden');
   var loadMoreElement = document.querySelector('.social__loadmore');
   loadMoreElement.classList.add('visually-hidden');
-
 };
 
 // Отрисовка окна с крупной картинкой
@@ -143,10 +152,9 @@ var renderBigPicture = function (picture) {
 
   hideCommentsFeatures();
 
-  var commentTemplate = createCommentTemplate();
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
-  renderComments(picture, commentsElement, commentTemplate);
+  renderComments(picture, commentsElement);
 };
 
 var initPage = function () {
