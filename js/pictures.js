@@ -28,6 +28,7 @@ var IMG_EXT = '.jpg';
 var AVATAR_PATH = 'img/avatar-';
 var AVATAR_EXT = '.svg';
 
+//  Функции генерации внутренних значений
 var getRandomInt = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
@@ -48,6 +49,13 @@ var generateCommentsPhrase = function (phraseNum) {
   return commentPhrase;
 };
 
+var removeChildren = function (element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+};
+
+//  Создаем массив, состоящий из photoNumber сгенерированных JS объектов
 var generatePhoto = function (index) {
   var photo = {};
   var comments = [];
@@ -69,17 +77,22 @@ var generatePhotos = function (photoNumber) {
   return photos;
 };
 
+//  Функции отрисовки сетки фотографий на странице
+var renderPhoto = function (pictureTemplate, picturesFragment, photo) {
+  var pictureElement = pictureTemplate.cloneNode(true);
+  pictureElement.querySelector('.picture__img').src = photo.url;
+  pictureElement.querySelector('.picture__stat--likes').photo = photo.likes;
+  pictureElement.querySelector('.picture__stat--comments').textContent = photo.comments.length;
+  picturesFragment.appendChild(pictureElement);
+};
+
 var renderPhotos = function (photos) {
   var pictureTemplate = document.querySelector('#picture').content;
   var pictureGridElement = document.querySelector('.pictures');
   var picturesFragment = document.createDocumentFragment();
 
-  photos.forEach(function (currentValue) {
-    var pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = currentValue.url;
-    pictureElement.querySelector('.picture__stat--likes').textContent = currentValue.likes;
-    pictureElement.querySelector('.picture__stat--comments').textContent = currentValue.comments.length;
-    picturesFragment.appendChild(pictureElement);
+  photos.forEach(function (photo) {
+    renderPhoto(pictureTemplate, picturesFragment, photo);
   });
 
   pictureGridElement.appendChild(picturesFragment);
@@ -87,34 +100,36 @@ var renderPhotos = function (photos) {
   return photos;
 };
 
-var removeChildren = function (element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-};
-
+//  Работа с комментариями
 var createCommentTemplate = function () {
   return document.querySelector('.social__comment');
 };
 
-var removeDefaultComments = function () {
-  var commentsElement = document.querySelector('.social__comments');
-  removeChildren(commentsElement);
-  return commentsElement;
+var renderComment = function (comment, fragment, commentTemplate) {
+  var commentElement = commentTemplate.cloneNode(true);
+  commentElement.querySelector('.social__picture').src = getAvatarPath(getRandomInt(1, 6));
+  commentElement.querySelector('.social__text').textContent = comment;
+  fragment.appendChild(commentElement);
 };
 
 var renderComments = function (photos, commentsElement, commentTemplate) {
   var commentsFragment = document.createDocumentFragment();
-  photos.comments.forEach(function (currentValue) {
-    var commentElement = commentTemplate.cloneNode(true);
-    commentElement.querySelector('.social__picture').src = getAvatarPath(getRandomInt(1, 6));
-    commentElement.querySelector('.social__text').textContent = currentValue;
-    commentsFragment.appendChild(commentElement);
+  photos.comments.forEach(function (comment) {
+    renderComment(comment, commentsFragment, commentTemplate);
   });
   commentsElement.appendChild(commentsFragment);
 };
 
+var hideCommentsFeatures = function () {
+  //  Прячем блоки счётчика комментариев и загрузки новых комментариев
+  var commentCountElement = document.querySelector('.social__comment-count');
+  commentCountElement.classList.add('visually-hidden');
+  var loadMoreElement = document.querySelector('.social__loadmore');
+  loadMoreElement.classList.add('visually-hidden');
 
+};
+
+// Отрисовка окна с крупной картинкой
 var renderBigPicture = function (picture) {
   var bigPictureElement = document.querySelector('.big-picture');
 
@@ -124,22 +139,20 @@ var renderBigPicture = function (picture) {
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   bigPictureElement.querySelector('.social__caption').textContent = picture.description;
 
-  //  Прячем блоки счётчика комментариев и загрузки новых комментариев
-  var commentCountElement = document.querySelector('.social__comment-count');
-  commentCountElement.classList.add('visually-hidden');
-  var loadMoreElement = document.querySelector('.social__loadmore');
-  loadMoreElement.classList.add('visually-hidden');
-
   bigPictureElement.classList.remove('hidden');
+
+  hideCommentsFeatures();
+
+  var commentTemplate = createCommentTemplate();
+  var commentsElement = document.querySelector('.social__comments');
+  removeChildren(commentsElement);
+  renderComments(picture, commentsElement, commentTemplate);
 };
 
 var initPage = function () {
   var photos = generatePhotos(PHOTO_NUMBER);
   renderPhotos(photos);
   renderBigPicture(photos[0]);
-  var commentTemplate = createCommentTemplate();
-  var commentsList = removeDefaultComments();
-  renderComments(photos[0], commentsList, commentTemplate);
 };
 
 initPage();
