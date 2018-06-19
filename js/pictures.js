@@ -32,12 +32,12 @@ var getRandomInt = function (min, max) {
   return Math.round(Math.random() * (max - min) + min);
 };
 
-var getPhotoPath = function (photoNum) {
-  return IMG_PATH + photoNum + IMG_EXT;
+var getPhotoPath = function (photoIndex) {
+  return IMG_PATH + photoIndex + IMG_EXT;
 };
 
-var getAvatarPath = function (avatarNum) {
-  return AVATAR_PATH + avatarNum + AVATAR_EXT;
+var getAvatarPath = function (avatarIndex) {
+  return AVATAR_PATH + avatarIndex + AVATAR_EXT;
 };
 
 var generateCommentsPhrase = function (phraseNum) {
@@ -48,10 +48,10 @@ var generateCommentsPhrase = function (phraseNum) {
   return commentPhrase;
 };
 
-var generatePhoto = function (urlNum) {
+var generatePhoto = function (index) {
   var photo = {};
   var comments = [];
-  photo.url = getPhotoPath(urlNum);
+  photo.url = getPhotoPath(index);
   photo.likes = getRandomInt(LIKES_MIN, LIKES_MAX);
   for (var i = 0; i < COMMENTS_NUMBER; i++) {
     comments[i] = generateCommentsPhrase(getRandomInt(1, MAX_PHRASE_IN_COMMENTS));
