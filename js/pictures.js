@@ -158,7 +158,7 @@ var renderBigPicture = function (picture) {
 
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
-  commentsElement.appendChild(renderComments(picture, commentsElement));
+  commentsElement.appendChild(renderComments(picture));
 };
 
 var initPage = function () {
