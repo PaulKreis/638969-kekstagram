@@ -82,10 +82,14 @@ var generatePhotos = function (photoNumber) {
 //  Функции отрисовки сетки фотографий на странице
 var renderPhoto = function (pictureTemplate, picturesFragment, photo) {
   var pictureElement = pictureTemplate.cloneNode(true);
+  var pictureImg = pictureElement.querySelector('.picture__img');
   pictureElement.querySelector('.picture__img').src = photo.url;
-  pictureElement.querySelector('.picture__stat--likes').photo = photo.likes;
+  pictureElement.querySelector('.picture__stat--likes').textContent = photo.likes;
   pictureElement.querySelector('.picture__stat--comments').textContent = photo.comments.length;
   picturesFragment.appendChild(pictureElement);
+  pictureImg.addEventListener('click', function () {
+    renderBigPicture(photo);
+  });
 };
 
 var renderPhotos = function (photos) {
@@ -96,10 +100,7 @@ var renderPhotos = function (photos) {
   photos.forEach(function (photo) {
     renderPhoto(pictureTemplate, picturesFragment, photo);
   });
-
   pictureGridElement.appendChild(picturesFragment);
-
-  return photos;
 };
 
 //  Работа с комментариями
@@ -120,8 +121,8 @@ var createCommentElement = function (comment) {
 
   commentElement.appendChild(socialPictureElement);
   commentElement.appendChild(socialTextElement);
-
   return commentElement;
+
 };
 
 var renderComments = function (photos) {
@@ -146,12 +147,12 @@ var hideCommentsFeatures = function () {
 var renderBigPicture = function (picture) {
   var bigPictureElement = document.querySelector('.big-picture');
 
-  bigPictureElement.querySelector('.big-picture__img').src = picture.url;
+  var bigPictureImg = bigPictureElement.querySelector('.big-picture__img');
+  bigPictureImg.querySelector('img').src = picture.url;
   bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
 
   bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
   bigPictureElement.querySelector('.social__caption').textContent = picture.description;
-
   bigPictureElement.classList.remove('hidden');
 
   hideCommentsFeatures();
@@ -159,12 +160,143 @@ var renderBigPicture = function (picture) {
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
   commentsElement.appendChild(renderComments(picture));
+
+  //  Закрытие окна с большой картинкой по клику на крестик
+  var bigPictureCloseBtn = bigPictureElement.querySelector('.big-picture__cancel');
+  bigPictureCloseBtn.addEventListener('click', function () {
+    bigPictureElement.classList.add('hidden');
+  });
 };
 
 var initPage = function () {
   var photos = generatePhotos(PHOTO_NUMBER);
   renderPhotos(photos);
-  renderBigPicture(photos[0]);
+  //  renderBigPicture(photos[0]);
 };
 
 initPage();
+
+//  #15 Личный проект: подробности
+var imgSetupWindow = document.querySelector('.img-upload__overlay');
+
+//  Открытие окна редактирования по загрузке файла
+var uploadFile = document.getElementById('upload-file');
+uploadFile.addEventListener('change', function () {
+  imgSetupWindow.classList.remove('hidden');
+  imgZoomValueChange('default');
+});
+
+//  Закрытие окна редактирования по клике на крестик
+var uploadCancel = document.getElementById('upload-cancel');
+uploadCancel.addEventListener('click', function () {
+  imgSetupWindow.classList.add('hidden');
+});
+
+//  Наложение эффекта на изображение
+var targetImage = document.querySelector('.img-upload__preview');
+var addFilter = function (filterName, proportion) {
+  var scaleValue = imgSetupWindow.querySelector('.scale__value');
+  var filter = '';
+  var intense;
+  switch (filterName) {
+    case 'chrome' :
+      intense = proportion.toFixed(2);
+      filter = 'grayscale(' + intense + ')';
+      break;
+    case 'sepia' :
+      intense = proportion.toFixed(2);
+      filter = 'sepia(' + intense + ')';
+      break;
+    case 'marvin' :
+      intense = proportion.toFixed(2) * 100;
+      filter = 'invert(' + intense + '%)';
+      break;
+    case 'phobos' :
+      intense = proportion.toFixed(1) * 3;
+      filter = 'blur(' + intense + 'px)';
+      break;
+    case 'heat' :
+      intense = proportion.toFixed(2) * 3;
+      filter = 'brightness(' + intense + ')';
+      break;
+    default :
+      filter = 'none';
+  }
+  scaleValue.textContent = intense;
+  targetImage.style.filter = filter;
+};
+
+var removeFilter = function () {
+  targetImage.style.filter = '';
+};
+
+var oldEffect = '';
+var addEffect = function (effectName) {
+  removeFilter();
+  var controlScale = imgSetupWindow.querySelector('.img-upload__scale');
+  targetImage.classList.remove('effects__preview--' + oldEffect);
+  targetImage.classList.add('effects__preview--' + effectName);
+  oldEffect = effectName;
+  if (effectName === 'none') {
+    controlScale.classList.add('hidden');
+  } else {
+    controlScale.classList.remove('hidden');
+  }
+};
+
+imgSetupWindow.addEventListener('click', function () {
+  if (event.target.name === 'effect') {
+    addEffect(event.target.value);
+  }
+});
+
+//  Ползунок
+var scalePin = imgSetupWindow.querySelector('.scale__pin');
+scalePin.addEventListener('mouseup', function () {
+  var scaleLine = imgSetupWindow.querySelector('.scale__line');
+  var scaleLineWidth = scaleLine.offsetWidth;
+  var pinX = scalePin.offsetLeft;
+  var proportion = (pinX / scaleLineWidth);
+  addFilter(oldEffect, proportion);
+});
+
+//  Изменение масштаба
+var imgZoomValueChange = function (action) {
+  var controlValue = imgSetupWindow.querySelector('.resize__control--value');
+  var RESIZE_STEP = 25;
+  var IMG_SIZE_MIN = 25;
+  var IMG_SIZE_MAX = 100;
+  var DEFAULT_ZOOM = 100;
+  var resizeValueNum = parseInt(controlValue.value, 10);
+
+  switch (action) {
+    case 'increase' :
+      if (resizeValueNum < IMG_SIZE_MAX) {
+        resizeValueNum += RESIZE_STEP;
+      }
+      break;
+    case 'decrease' :
+      if (resizeValueNum > IMG_SIZE_MIN) {
+        resizeValueNum -= RESIZE_STEP;
+      }
+      break;
+    case 'default' :
+      resizeValueNum = DEFAULT_ZOOM;
+      break;
+  }
+
+  targetImage.style.transform = 'scale(' + resizeValueNum / 100 + ')';
+  controlValue.value = resizeValueNum + '%';
+};
+
+var controlPlus = imgSetupWindow.querySelector('.resize__control--plus');
+controlPlus.addEventListener('click', function () {
+  imgZoomValueChange('increase');
+});
+
+var controlMinus = imgSetupWindow.querySelector('.resize__control--minus');
+controlMinus.addEventListener('click', function () {
+  imgZoomValueChange('decrease');
+});
+
+
