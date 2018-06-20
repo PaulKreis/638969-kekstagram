@@ -27,6 +27,8 @@ var IMG_PATH = 'photos/';
 var IMG_EXT = '.jpg';
 var AVATAR_PATH = 'img/avatar-';
 var AVATAR_EXT = '.svg';
+var AVATAR_HEIGHT = 35;
+var AVATAR_WIDTH = 35;
 
 //  Функции генерации внутренних значений
 var getRandomInt = function (min, max) {
@@ -104,30 +106,32 @@ var renderPhotos = function (photos) {
 var createCommentElement = function (comment) {
   var commentElement = document.createElement('li');
   commentElement.className = 'social__comment';
-  var img = document.createElement('img');
-  img.className = 'social__picture';
-  img.src = getAvatarPath(getRandomInt(1, 6));
-  img.alt = 'Аватар комментатора фотографии';
-  img.width = '35';
-  img.height = '35';
-  var p = document.createElement('p');
-  p.className = 'social__text';
-  p.textContent = comment;
 
-  commentElement.appendChild(img);
-  commentElement.appendChild(p);
+  var socialPictureElement = document.createElement('img');
+  socialPictureElement.className = 'social__picture';
+  socialPictureElement.src = getAvatarPath(getRandomInt(1, 6));
+  socialPictureElement.alt = 'Аватар комментатора фотографии';
+  socialPictureElement.width = AVATAR_WIDTH;
+  socialPictureElement.height = AVATAR_HEIGHT;
+
+  var socialTextElement = document.createElement('p');
+  socialTextElement.className = 'social__text';
+  socialTextElement.textContent = comment;
+
+  commentElement.appendChild(socialPictureElement);
+  commentElement.appendChild(socialTextElement);
 
   return commentElement;
 };
 
-var renderComments = function (photos, commentsElement) {
+var renderComments = function (photos) {
   var commentsFragment = document.createDocumentFragment();
 
   photos.comments.forEach(function (comment) {
-    commentsFragment.appendChild(createCommentElement(comment, commentsElement));
+    commentsFragment.appendChild(createCommentElement(comment));
   });
 
-  commentsElement.appendChild(commentsFragment);
+  return commentsFragment;
 };
 
 var hideCommentsFeatures = function () {
@@ -154,7 +158,7 @@ var renderBigPicture = function (picture) {
 
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
-  renderComments(picture, commentsElement);
+  commentsElement.appendChild(renderComments(picture, commentsElement));
 };
 
 var initPage = function () {
