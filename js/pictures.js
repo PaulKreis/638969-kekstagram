@@ -181,26 +181,27 @@ var renderBigPicture = function (picture) {
   });
 };
 
+var uploadOverlay = document.querySelector('.img-upload__overlay');
+var uploadFile = document.getElementById('upload-file');
+
+var openUploadOverlay = function () {
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+  imgZoomValueChange('default');
+};
+
 var initPage = function () {
   var photos = generatePhotos(PHOTO_NUMBER);
   renderPhotos(photos);
-  var uploadFile = document.getElementById('upload-file');
-  uploadFile.addEventListener('change', function () {
-    uploadOverlay.classList.remove('hidden');
-    imgZoomValueChange('default');
-    document.addEventListener('keydown', onUploadOverlayEscPress);
-  });
+  uploadFile.addEventListener('change', openUploadOverlay);
 };
 
 initPage();
 
-//  #15 Личный проект: подробности
-var uploadOverlay = document.querySelector('.img-upload__overlay');
-
-//  Закрытие окна редактирования по клике на крестик
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
+  uploadFile.value = '';
 };
 
 var uploadCancel = document.getElementById('upload-cancel');
