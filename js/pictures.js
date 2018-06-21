@@ -123,7 +123,6 @@ var createCommentElement = function (comment) {
   commentElement.appendChild(socialPictureElement);
   commentElement.appendChild(socialTextElement);
   return commentElement;
-
 };
 
 var renderComments = function (photos) {
@@ -175,6 +174,11 @@ var renderBigPicture = function (picture) {
   bigPictureCloseBtn.addEventListener('click', function () {
     closeBigPicture(bigPictureElement);
   });
+  document.addEventListener('keydown', function () {
+    if (event.keyCode === ESC_KEYCODE) {
+      closeBigPicture(bigPictureElement);
+    }
+  });
 };
 
 var initPage = function () {
@@ -184,6 +188,7 @@ var initPage = function () {
   uploadFile.addEventListener('change', function () {
     uploadOverlay.classList.remove('hidden');
     imgZoomValueChange('default');
+    document.addEventListener('keydown', onUploadOverlayEscPress);
   });
 };
 
@@ -195,6 +200,7 @@ var uploadOverlay = document.querySelector('.img-upload__overlay');
 //  Закрытие окна редактирования по клике на крестик
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
 };
 
 var uploadCancel = document.getElementById('upload-cancel');
@@ -208,8 +214,6 @@ var onUploadOverlayEscPress = function (evt) {
     closeUploadOverlay();
   }
 };
-
-document.addEventListener('keydown', onUploadOverlayEscPress);
 
 //  Наложение эффекта на изображение
 var targetImage = document.querySelector('.img-upload__preview');
