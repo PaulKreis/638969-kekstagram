@@ -322,3 +322,65 @@ var controlMinus = uploadOverlay.querySelector('.resize__control--minus');
 controlMinus.addEventListener('click', function () {
   imgZoomValueChange('decrease');
 });
+
+//  #16 Личный проект: доверяй, но проверяй
+
+//  если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы
+var textHashtagsArea = document.querySelector('.text__hashtags');
+textHashtagsArea.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+});
+
+textHashtagsArea.addEventListener('focusout', function () {
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+});
+
+//  если фокус находится в поле ввода комментария, нажатие на Esc не должно приводить к закрытию формы
+var textDescriptionArea = document.querySelector('.text__description');
+textDescriptionArea.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+});
+
+textDescriptionArea.addEventListener('focusout', function () {
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+});
+
+//  2.3. Хэш-теги
+textHashtagsArea.addEventListener('change', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+function checkContains(arr, elem) {
+  var numberOfElem = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === elem) {
+      numberOfElem++;
+    }
+  }
+  return numberOfElem;
+}
+
+var hashtagError = function (message) {
+  textHashtagsArea.setCustomValidity(message);
+  textHashtagsArea.style.border = 'solid 3px red';
+};
+
+var hashtagsCheck = function (hashtags) {
+  hashtags.forEach(function (hashtag) {
+    if (hashtag.charAt(0) !== '#') {
+      hashtagError('Хэш-тег начинается с символа # (решётка)');
+    } else if (hashtag === '#') {
+      hashtagError('Хеш-тег не может состоять только из одной решётки');
+    } else if (hashtags.length > 5) {
+      hashtagError('Нельзя указать больше пяти хэш-тегов');
+    } else if (hashtag.length > 20) {
+      hashtagError('Максимальная длина одного хэш-тега 20 символов, включая решётку');
+    } else if (checkContains(hashtags, hashtag) !== 1) {
+      hashtagError('Один и тот же хэш-тег не может быть использован дважды');
+    } else {
+      textHashtagsArea.setCustomValidity('');
+    }
+  });
+};
+
