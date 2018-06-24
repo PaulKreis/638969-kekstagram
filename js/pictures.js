@@ -322,3 +322,96 @@ var controlMinus = uploadOverlay.querySelector('.resize__control--minus');
 controlMinus.addEventListener('click', function () {
   imgZoomValueChange('decrease');
 });
+
+//  #16 Личный проект: доверяй, но проверяй
+
+//  если фокус находится в поле ввода хэш-тега, нажатие на Esc не должно приводить к закрытию формы
+var textHashtagsArea = document.querySelector('.text__hashtags');
+textHashtagsArea.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+});
+
+textHashtagsArea.addEventListener('focusout', function () {
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+});
+
+//  если фокус находится в поле ввода комментария, нажатие на Esc не должно приводить к закрытию формы
+var textDescriptionArea = document.querySelector('.text__description');
+textDescriptionArea.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+});
+
+textDescriptionArea.addEventListener('focusout', function () {
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+});
+
+//  2.3. Хэш-теги
+var submitButton = document.querySelector('.img-upload__submit');
+submitButton.addEventListener('click', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+var imgEditForm = document.querySelector('.img-upload__form');
+imgEditForm.addEventListener('submit', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+imgEditForm.addEventListener('invalid', function () {
+  setDesriptionError();
+});
+
+submitButton.addEventListener('click', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+textHashtagsArea.addEventListener('input', function () {
+  hashtagAreaErrorReset();
+});
+
+
+function checkContains(arr, elem) {
+  var numberOfElem = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i].toUpperCase() === elem.toUpperCase()) {
+      numberOfElem++;
+    }
+  }
+  return numberOfElem;
+}
+
+var setHashtagError = function (message) {
+  textHashtagsArea.setCustomValidity(message);
+  textHashtagsArea.style.border = 'solid 3px red';
+};
+
+var setDesriptionError = function () {
+  textDescriptionArea.setCustomValidity('Мксимальная длина описнаия - 140 символов');
+};
+
+var hashtagAreaErrorReset = function () {
+  textHashtagsArea.setCustomValidity('');
+  textHashtagsArea.style.border = 'none';
+};
+
+var hashtagsCheck = function (hashtags) {
+  hashtagAreaErrorReset();
+  hashtags.forEach(function (hashtag) {
+    if (hashtag === '') {
+      textHashtagsArea.setCustomValidity('');
+    } else if (hashtag.charAt(0) !== '#') {
+      setHashtagError('Хэш-тег начинается с символа # (решётка)');
+    } else if (hashtag === '#') {
+      setHashtagError('Хеш-тег не может состоять только из одной решётки');
+    } else if (hashtags.length > 5) {
+      setHashtagError('Нельзя указать больше пяти хэш-тегов');
+    } else if (hashtag.length > 20) {
+      setHashtagError('Максимальная длина одного хэш-тега 20 символов, включая решётку');
+    } else if (checkContains(hashtags, hashtag) !== 1) {
+      setHashtagError('Один и тот же хэш-тег не может быть использован дважды');
+    }
+  });
+};
+
