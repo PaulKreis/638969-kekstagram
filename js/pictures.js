@@ -352,6 +352,26 @@ submitButton.addEventListener('click', function () {
   hashtagsCheck(hashtagsArray);
 });
 
+var imgEditForm = document.querySelector('.img-upload__form');
+imgEditForm.addEventListener('submit', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+imgEditForm.addEventListener('invalid', function () {
+  setDesriptionError();
+});
+
+submitButton.addEventListener('click', function () {
+  var hashtagsArray = textHashtagsArea.value.split(' ');
+  hashtagsCheck(hashtagsArray);
+});
+
+textHashtagsArea.addEventListener('input', function () {
+  hashtagAreaErrorReset();
+});
+
+
 function checkContains(arr, elem) {
   var numberOfElem = 0;
   for (var i = 0; i < arr.length; i++) {
@@ -367,9 +387,17 @@ var setHashtagError = function (message) {
   textHashtagsArea.style.border = 'solid 3px red';
 };
 
+var setDesriptionError = function () {
+  textDescriptionArea.setCustomValidity('Мксимальная длина описнаия - 140 символов');
+};
+
+var hashtagAreaErrorReset = function () {
+  textHashtagsArea.setCustomValidity('');
+  textHashtagsArea.style.border = 'none';
+};
 
 var hashtagsCheck = function (hashtags) {
-  textHashtagsArea.setCustomValidity('');
+  hashtagAreaErrorReset();
   hashtags.forEach(function (hashtag) {
     if (hashtag === '') {
       textHashtagsArea.setCustomValidity('');
