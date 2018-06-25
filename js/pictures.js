@@ -30,6 +30,8 @@ var AVATAR_EXT = '.svg';
 var AVATAR_HEIGHT = 35;
 var AVATAR_WIDTH = 35;
 var ESC_KEYCODE = 27;
+var SLIDER_MAX = 453;
+var SLIDER_MIN = 0;
 
 //  Функции генерации внутренних значений
 var getRandomInt = function (min, max) {
@@ -164,7 +166,7 @@ var renderBigPicture = function (picture) {
 
   openBigPicture(bigPictureElement);
   hideCommentsFeatures();
-
+  addEffect('none');
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
   commentsElement.appendChild(renderComments(picture));
@@ -188,6 +190,7 @@ var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
   imgZoomValueChange('default');
+  addEffect('none');
 };
 
 var initPage = function () {
@@ -257,6 +260,7 @@ var removeFilter = function () {
 var oldEffect = '';
 var addEffect = function (effectName) {
   removeFilter();
+  resetEffectSlider();
   var controlScale = uploadOverlay.querySelector('.img-upload__scale');
   targetImage.classList.remove('effects__preview--' + oldEffect);
   targetImage.classList.add('effects__preview--' + effectName);
@@ -276,14 +280,52 @@ uploadOverlay.addEventListener('click', function () {
 
 //  Ползунок
 var scalePin = uploadOverlay.querySelector('.scale__pin');
-scalePin.addEventListener('mouseup', function () {
+var scaleLevelLine = uploadOverlay.querySelector('.scale__level');
+scalePin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+    };
+    imgEffectUpdate();
+    startCoords = {
+      x: moveEvt.clientX,
+    };
+    var shiftScale = (scalePin.offsetLeft - shift.x);
+    if (shiftScale > SLIDER_MIN && shiftScale <= SLIDER_MAX) {
+      scaleLevelLine.style.width = shiftScale + 'px';
+      scalePin.style.left = shiftScale + 'px';
+    }
+  };
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    imgEffectUpdate();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
+var imgEffectUpdate = function () {
   var scaleLine = uploadOverlay.querySelector('.scale__line');
   var scaleLineWidth = scaleLine.offsetWidth;
   var pinX = scalePin.offsetLeft;
   var proportion = (pinX / scaleLineWidth);
   addFilter(oldEffect, proportion);
-});
+};
 
+var resetEffectSlider = function () {
+  scaleLevelLine.style.width = SLIDER_MAX + 'px';
+  scalePin.style.left = SLIDER_MAX + 'px';
+};
 //  Изменение масштаба
 var imgZoomValueChange = function (action) {
   var controlValue = uploadOverlay.querySelector('.resize__control--value');
