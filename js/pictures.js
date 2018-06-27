@@ -275,6 +275,7 @@ var addEffect = function (effectName) {
 uploadOverlay.addEventListener('click', function () {
   if (event.target.name === 'effect') {
     addEffect(event.target.value);
+    imgEffectUpdate();
   }
 });
 
