@@ -284,7 +284,6 @@ var scaleLevelLine = uploadOverlay.querySelector('.scale__level');
 var scaleLine = uploadOverlay.querySelector('.scale__line');
 
 var onScaleLineClick = function (ev) {
-  console.log(ev.offsetX);
   sliderUpdate(ev.offsetX);
   imgEffectUpdate();
 };
