@@ -239,7 +239,7 @@ var addFilter = function (filterName, proportion) {
       filter = 'invert(' + intense + '%)';
       break;
     case 'phobos' :
-      intense = proportion.toFixed(1) * 3;
+      intense = proportion.toFixed(3) * 3;
       filter = 'blur(' + intense + 'px)';
       break;
     case 'heat' :
@@ -257,14 +257,14 @@ var removeFilter = function () {
   targetImage.style.filter = '';
 };
 
-var oldEffect = '';
+var currentEffectName = '';
 var addEffect = function (effectName) {
   removeFilter();
   resetEffectSlider();
   var controlScale = uploadOverlay.querySelector('.img-upload__scale');
-  targetImage.classList.remove('effects__preview--' + oldEffect);
+  targetImage.classList.remove('effects__preview--' + currentEffectName);
   targetImage.classList.add('effects__preview--' + effectName);
-  oldEffect = effectName;
+  currentEffectName = effectName;
   if (effectName === 'none') {
     controlScale.classList.add('hidden');
   } else {
@@ -281,6 +281,16 @@ uploadOverlay.addEventListener('click', function () {
 //  Ползунок
 var scalePin = uploadOverlay.querySelector('.scale__pin');
 var scaleLevelLine = uploadOverlay.querySelector('.scale__level');
+var scaleLine = uploadOverlay.querySelector('.scale__line');
+
+var onScaleLineClick = function (ev) {
+  console.log(ev.offsetX);
+  sliderUpdate(ev.offsetX);
+  imgEffectUpdate();
+};
+
+scaleLine.addEventListener('mouseup', onScaleLineClick);
+
 scalePin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
@@ -294,32 +304,40 @@ scalePin.addEventListener('mousedown', function (evt) {
     var shift = {
       x: startCoords.x - moveEvt.clientX,
     };
-    imgEffectUpdate();
+
     startCoords = {
       x: moveEvt.clientX,
     };
+
     var shiftScale = (scalePin.offsetLeft - shift.x);
-    if (shiftScale > SLIDER_MIN && shiftScale <= SLIDER_MAX) {
-      scaleLevelLine.style.width = shiftScale + 'px';
-      scalePin.style.left = shiftScale + 'px';
-    }
+    sliderUpdate(shiftScale);
+    imgEffectUpdate();
   };
+
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     imgEffectUpdate();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
+    scaleLine.addEventListener('mouseup', onScaleLineClick);
   };
+
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+  scaleLine.removeEventListener('mouseup', onScaleLineClick);
 });
 
+var sliderUpdate = function (shift) {
+  if (shift > SLIDER_MIN && shift <= SLIDER_MAX) {
+    scaleLevelLine.style.width = shift + 'px';
+    scalePin.style.left = shift + 'px';
+  }
+};
 var imgEffectUpdate = function () {
-  var scaleLine = uploadOverlay.querySelector('.scale__line');
   var scaleLineWidth = scaleLine.offsetWidth;
   var pinX = scalePin.offsetLeft;
   var proportion = (pinX / scaleLineWidth);
-  addFilter(oldEffect, proportion);
+  addFilter(currentEffectName, proportion);
 };
 
 var resetEffectSlider = function () {
