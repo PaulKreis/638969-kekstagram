@@ -30,6 +30,8 @@ var AVATAR_EXT = '.svg';
 var AVATAR_HEIGHT = 35;
 var AVATAR_WIDTH = 35;
 var ESC_KEYCODE = 27;
+var SLIDER_MAX = 453;
+var SLIDER_MIN = 0;
 
 //  Функции генерации внутренних значений
 var getRandomInt = function (min, max) {
@@ -164,7 +166,7 @@ var renderBigPicture = function (picture) {
 
   openBigPicture(bigPictureElement);
   hideCommentsFeatures();
-
+  addEffect('none');
   var commentsElement = document.querySelector('.social__comments');
   removeChildren(commentsElement);
   commentsElement.appendChild(renderComments(picture));
@@ -188,6 +190,7 @@ var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
   imgZoomValueChange('default');
+  addEffect('none');
 };
 
 var initPage = function () {
@@ -236,7 +239,7 @@ var addFilter = function (filterName, proportion) {
       filter = 'invert(' + intense + '%)';
       break;
     case 'phobos' :
-      intense = proportion.toFixed(1) * 3;
+      intense = proportion.toFixed(3) * 3;
       filter = 'blur(' + intense + 'px)';
       break;
     case 'heat' :
@@ -254,13 +257,14 @@ var removeFilter = function () {
   targetImage.style.filter = '';
 };
 
-var oldEffect = '';
+var currentEffectName = '';
 var addEffect = function (effectName) {
   removeFilter();
+  resetEffectSlider();
   var controlScale = uploadOverlay.querySelector('.img-upload__scale');
-  targetImage.classList.remove('effects__preview--' + oldEffect);
+  targetImage.classList.remove('effects__preview--' + currentEffectName);
   targetImage.classList.add('effects__preview--' + effectName);
-  oldEffect = effectName;
+  currentEffectName = effectName;
   if (effectName === 'none') {
     controlScale.classList.add('hidden');
   } else {
@@ -271,19 +275,75 @@ var addEffect = function (effectName) {
 uploadOverlay.addEventListener('click', function () {
   if (event.target.name === 'effect') {
     addEffect(event.target.value);
+    imgEffectUpdate();
   }
 });
 
 //  Ползунок
 var scalePin = uploadOverlay.querySelector('.scale__pin');
-scalePin.addEventListener('mouseup', function () {
-  var scaleLine = uploadOverlay.querySelector('.scale__line');
+var scaleLevelLine = uploadOverlay.querySelector('.scale__level');
+var scaleLine = uploadOverlay.querySelector('.scale__line');
+
+var onScaleLineClick = function (ev) {
+  sliderUpdate(ev.offsetX);
+  imgEffectUpdate();
+};
+
+scaleLine.addEventListener('mouseup', onScaleLineClick);
+
+scalePin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+    };
+
+    var shiftScale = (scalePin.offsetLeft - shift.x);
+    sliderUpdate(shiftScale);
+    imgEffectUpdate();
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    imgEffectUpdate();
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    scaleLine.addEventListener('mouseup', onScaleLineClick);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+  scaleLine.removeEventListener('mouseup', onScaleLineClick);
+});
+
+var sliderUpdate = function (shift) {
+  if (shift > SLIDER_MIN && shift <= SLIDER_MAX) {
+    scaleLevelLine.style.width = shift + 'px';
+    scalePin.style.left = shift + 'px';
+  }
+};
+var imgEffectUpdate = function () {
   var scaleLineWidth = scaleLine.offsetWidth;
   var pinX = scalePin.offsetLeft;
   var proportion = (pinX / scaleLineWidth);
-  addFilter(oldEffect, proportion);
-});
+  addFilter(currentEffectName, proportion);
+};
 
+var resetEffectSlider = function () {
+  scaleLevelLine.style.width = SLIDER_MAX + 'px';
+  scalePin.style.left = SLIDER_MAX + 'px';
+};
 //  Изменение масштаба
 var imgZoomValueChange = function (action) {
   var controlValue = uploadOverlay.querySelector('.resize__control--value');
