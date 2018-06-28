@@ -5,7 +5,7 @@
 
   var uploadOverlay = document.querySelector('.img-upload__overlay');
 
-  window.form = {
+  window.uploadPhoto = {
     openUploadOverlay: function () {
       uploadOverlay.classList.remove('hidden');
       document.addEventListener('keydown', onUploadOverlayEscPress);
@@ -18,7 +18,7 @@
   var closeUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
     document.removeEventListener('keydown', onUploadOverlayEscPress);
-    window.form.uploadFile.value = '';
+    window.uploadPhoto.uploadFile.value = '';
   };
 
   var uploadCancel = document.getElementById('upload-cancel');
@@ -28,7 +28,7 @@
 
   //  Закрытие окна редактирования по нажатию Esc
   var onUploadOverlayEscPress = function (evt) {
-    if (evt.keyCode === window.utils.ESC_KEYCODE) {
+    if (evt.keyCode === window.enums.ESC_KEYCODE) {
       closeUploadOverlay();
     }
   };

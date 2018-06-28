@@ -78,7 +78,7 @@
         closeBigPicture(bigPictureElement);
       });
       document.addEventListener('keydown', function () {
-        if (event.keyCode === window.utils.ESC_KEYCODE) {
+        if (event.keyCode === window.enums.ESC_KEYCODE) {
           closeBigPicture(bigPictureElement);
         }
       });
