@@ -1,10 +1,7 @@
 'use strict';
-var PHOTO_NUMBER = 25;
-
-var initPage = function () {
+(function () {
+  var PHOTO_NUMBER = 25;
   var photos = window.data.generatePhotos(PHOTO_NUMBER);
-  window.gallery.renderPhotos(photos);
-  window.uploadPhoto.uploadFile.addEventListener('change', window.uploadPhoto.openUploadOverlay);
-};
-
-initPage();
+  window.gallery.render(photos, document.querySelector('.pictures'));
+  window.upload.init();
+})();

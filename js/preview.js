@@ -2,11 +2,11 @@
 (function () {
   var AVATAR_HEIGHT = 35;
   var AVATAR_WIDTH = 35;
-  var AVATAR_PATH = 'img/avatar-';
+  var AVATAR_PATH = 'img/avatar';
   var AVATAR_EXT = '.svg';
 
   var getAvatarPath = function (avatarIndex) {
-    return AVATAR_PATH + avatarIndex + AVATAR_EXT;
+    return AVATAR_PATH + '-' + avatarIndex + AVATAR_EXT;
   };
 
   var createCommentElement = function (comment) {
@@ -47,16 +47,16 @@
   };
 
   // Отрисовка окна с крупной картинкой
-  var openBigPicture = function (bigPictureElement) {
+  var open = function (bigPictureElement) {
     bigPictureElement.classList.remove('hidden');
   };
 
-  var closeBigPicture = function (bigPictureElement) {
+  var close = function (bigPictureElement) {
     bigPictureElement.classList.add('hidden');
   };
 
   window.preview = {
-    renderBigPicture: function (picture) {
+    render: function (picture) {
       var bigPictureElement = document.querySelector('.big-picture');
 
       var bigPictureImg = bigPictureElement.querySelector('.big-picture__img');
@@ -66,20 +66,20 @@
       bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
       bigPictureElement.querySelector('.social__caption').textContent = picture.description;
 
-      openBigPicture(bigPictureElement);
+      open(bigPictureElement);
       hideCommentsFeatures();
       var commentsElement = document.querySelector('.social__comments');
       window.utils.removeChildren(commentsElement);
       commentsElement.appendChild(renderComments(picture));
 
       //  Закрытие окна с большой картинкой по клику на крестик
-      var bigPictureCloseBtn = bigPictureElement.querySelector('.big-picture__cancel');
-      bigPictureCloseBtn.addEventListener('click', function () {
-        closeBigPicture(bigPictureElement);
+      var closeBtn = bigPictureElement.querySelector('.big-picture__cancel');
+      closeBtn.addEventListener('click', function () {
+        close(bigPictureElement);
       });
       document.addEventListener('keydown', function () {
-        if (event.keyCode === window.enums.ESC_KEYCODE) {
-          closeBigPicture(bigPictureElement);
+        if (event.keyCode === window.enums.KeyCode.ESC) {
+          close(bigPictureElement);
         }
       });
     }

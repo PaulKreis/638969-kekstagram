@@ -1,7 +1,8 @@
 'use strict';
 (function () {
+  var pictureTemplate = document.querySelector('#picture').content;
   window.picture = {
-    renderPhoto: function (pictureTemplate, picturesFragment, photo) {
+    render: function (picturesFragment, photo) {
       var pictureElement = pictureTemplate.cloneNode(true);
       var pictureImg = pictureElement.querySelector('.picture__img');
       pictureElement.querySelector('.picture__img').src = photo.url;
@@ -9,7 +10,7 @@
       pictureElement.querySelector('.picture__stat--comments').textContent = photo.comments.length;
       picturesFragment.appendChild(pictureElement);
       pictureImg.addEventListener('click', function () {
-        window.preview.renderBigPicture(photo);
+        window.preview.render(photo);
       });
     }
   };
