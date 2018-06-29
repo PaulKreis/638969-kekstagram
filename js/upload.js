@@ -208,6 +208,8 @@
   imgEditForm.addEventListener('submit', function () {
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
+    window.backend.dataUpload(new FormData(imgEditForm), closeOverlay, window.generateWindow);
+    event.preventDefault();
   });
 
   imgEditForm.addEventListener('invalid', function () {
