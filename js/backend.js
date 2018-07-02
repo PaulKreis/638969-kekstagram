@@ -41,7 +41,7 @@
   };
 
   window.backend = {
-    dataLoad: function (onSuccess, onError) {
+    load: function (onSuccess, onError) {
       var URL = 'https://js.dump.academy/kekstagram/data';
       var XHR_TIMEOUT = 10000;
 
@@ -70,7 +70,7 @@
       xhr.send();
     },
 
-    dataUpload: function (data, onLoad, onError) {
+    send: function (data, onLoad, onError) {
       var URL = 'https://js.dump.academy/kekstagram';
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
@@ -78,7 +78,7 @@
         if (xhr.status === 200) {
           onLoad();
         } else {
-          onError('Ошибка соединения', checkErrorCode(xhr.status));
+          onError('Ошибка соединения: ' + checkErrorCode(xhr.status));
         }
       });
       xhr.open('POST', URL);

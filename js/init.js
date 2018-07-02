@@ -3,6 +3,6 @@
   var onLoadSucess = function (photos) {
     window.gallery.render(photos, document.querySelector('.pictures'));
   };
-  window.backend.dataLoad(onLoadSucess, window.generateWindow);
+  window.backend.load(onLoadSucess, window.generateWindow);
   window.upload.init();
 })();

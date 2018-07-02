@@ -5,10 +5,17 @@
 
   var overlay = document.querySelector('.img-upload__overlay');
 
+
+  var formReset = function () {
+    tagsInput.value = '';
+    descriptionArea.value = '';
+  };
+
   var closeOverlay = function () {
     overlay.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     window.upload.file.value = '';
+    formReset();
   };
 
   var cancel = document.getElementById('upload-cancel');
@@ -206,10 +213,10 @@
 
   var imgEditForm = document.querySelector('.img-upload__form');
   imgEditForm.addEventListener('submit', function () {
+    event.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
-    window.backend.dataUpload(new FormData(imgEditForm), closeOverlay, window.generateWindow);
-    event.preventDefault();
+    window.backend.send(new FormData(imgEditForm), closeOverlay, window.utils.showErrorMsg);
   });
 
   imgEditForm.addEventListener('invalid', function () {
