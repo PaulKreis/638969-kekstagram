@@ -5,10 +5,27 @@
 
   var overlay = document.querySelector('.img-upload__overlay');
 
+
+  var formReset = function () {
+    tagsInput.value = '';
+    descriptionArea.value = '';
+  };
+
+  var showErrorMsg = function (errorMsgTxt) {
+    var errorMsgTemplate = document.querySelector('.img-upload__message--error');
+    var errorMsgElement = errorMsgTemplate.cloneNode(true);
+    errorMsgElement.innerHTML = errorMsgTxt + '<div class="error__links"> <a class="error__link" href="index.html">Попробовать снова</a> <a class="error__link" href="index.html">Загрузить другой файл</a> </div>';
+    errorMsgElement.classList.remove('hidden');
+    errorMsgElement.style.zIndex = 2;
+    var imgUpload = document.querySelector('.img-upload');
+    imgUpload.appendChild(errorMsgElement);
+  };
+
   var closeOverlay = function () {
     overlay.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     window.upload.file.value = '';
+    formReset();
   };
 
   var cancel = document.getElementById('upload-cancel');
@@ -206,8 +223,10 @@
 
   var imgEditForm = document.querySelector('.img-upload__form');
   imgEditForm.addEventListener('submit', function () {
+    event.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
+    window.uploadService.send(new FormData(imgEditForm), closeOverlay, showErrorMsg);
   });
 
   imgEditForm.addEventListener('invalid', function () {

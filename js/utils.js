@@ -5,9 +5,7 @@
       return Math.round(Math.random() * (max - min) + min);
     },
     removeChildren: function (element) {
-      while (element.firstChild) {
-        element.removeChild(element.firstChild);
-      }
+      element.innerHTML = '';
     }
   };
 })();
