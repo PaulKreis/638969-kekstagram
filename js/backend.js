@@ -61,7 +61,7 @@
       });
 
       xhr.addEventListener('timeout', function () {
-        onError('Не удалось загрузить изображения', 'Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+        onError('Не удалось загрузить изображения.', 'Запрос не успел выполниться за ' + xhr.timeout + 'мс');
       });
 
       xhr.timeout = XHR_TIMEOUT;
