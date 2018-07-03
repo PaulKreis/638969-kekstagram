@@ -42,7 +42,7 @@
 
   window.backend = {
     load: function (onSuccess, onError) {
-      var URL = 'https://js.dump.academy/kekstagram/data';
+      var URL = 'https://js.dump.academy/kekstagram/data2';
       var XHR_TIMEOUT = 10000;
 
       var xhr = new XMLHttpRequest();

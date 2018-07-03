@@ -216,7 +216,7 @@
     event.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
-    window.backend.send(new FormData(imgEditForm), closeOverlay, window.utils.showErrorMsg);
+    window.uploadService.send(new FormData(imgEditForm), closeOverlay, window.utils.showErrorMsg);
   });
 
   imgEditForm.addEventListener('invalid', function () {

@@ -3,6 +3,9 @@
   var onLoadSuccess = function (photos) {
     window.gallery.render(photos, document.querySelector('.pictures'));
   };
+  var onLoadError = function (header, msg) {
+    window.modalError.render(header, msg);
+  };
   var pictureTemplate = document.querySelector('#picture').content;
   var renderPicture = function (picturesFragment, photo) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -26,7 +29,7 @@
       target.appendChild(picturesFragment);
     },
     load: function () {
-      window.backend.load(onLoadSuccess, window.modalError.render);
+      window.galleryService.load(onLoadSuccess, onLoadError);
     }
   };
 })();
