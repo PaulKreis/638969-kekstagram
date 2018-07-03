@@ -1,23 +1,8 @@
 'use strict';
 (function () {
-  window.gallery = {
-    render: function (photos, target) {
-      var picturesFragment = document.createDocumentFragment();
-
-      photos.forEach(function (photo) {
-        renderPicture(picturesFragment, photo);
-      });
-
-      target.appendChild(picturesFragment);
-    },
-    load: function () {
-      var onLoadSucess = function (photos) {
-        window.gallery.render(photos, document.querySelector('.pictures'));
-      };
-      window.backend.load(onLoadSucess, window.modalError.render);
-    }
+  var onLoadSuccess = function (photos) {
+    window.gallery.render(photos, document.querySelector('.pictures'));
   };
-
   var pictureTemplate = document.querySelector('#picture').content;
   var renderPicture = function (picturesFragment, photo) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -29,5 +14,19 @@
     pictureImg.addEventListener('click', function () {
       window.preview.render(photo);
     });
+  };
+  window.gallery = {
+    render: function (photos, target) {
+      var picturesFragment = document.createDocumentFragment();
+
+      photos.forEach(function (photo) {
+        renderPicture(picturesFragment, photo);
+      });
+
+      target.appendChild(picturesFragment);
+    },
+    load: function () {
+      window.backend.load(onLoadSuccess, window.modalError.render);
+    }
   };
 })();

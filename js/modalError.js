@@ -5,44 +5,43 @@
   var BACKGROUND = 'white';
   var HEADER_COLOR = 'black';
   var TEXT_COLOR = 'black';
-  var HEADER_TEXT_SIZE = 30;
-  var CONTENT_TEXT_SIZE = 15;
+  var HEADER_SIZE = 30;
+  var CONTENT_SIZE = 15;
 
   window.modalError = {
-    render: function (header, text) {
-      var modalWindow = document.createElement('div');
-      modalWindow.style.width = WIDTH + 'px';
-      modalWindow.style.height = HEIGHT + 'px';
-      modalWindow.style.background = BACKGROUND;
-      modalWindow.style.border = 'solid red 5px';
-      modalWindow.style.borderRadius = '5px';
-      modalWindow.style.position = 'absolute';
-      modalWindow.style.top = 0;
-      modalWindow.style.bottom = 0;
-      modalWindow.style.left = 0;
-      modalWindow.style.right = 0;
-      modalWindow.style.margin = 'auto';
-      modalWindow.style.zIndex = '3';
+    render: function (headerText, contentText) {
+      var wrapper = document.createElement('div');
+      wrapper.style.width = WIDTH + 'px';
+      wrapper.style.height = HEIGHT + 'px';
+      wrapper.style.background = BACKGROUND;
+      wrapper.style.border = 'solid red 5px';
+      wrapper.style.borderRadius = '5px';
+      wrapper.style.position = 'absolute';
+      wrapper.style.top = 0;
+      wrapper.style.bottom = 0;
+      wrapper.style.left = 0;
+      wrapper.style.right = 0;
+      wrapper.style.margin = 'auto';
+      wrapper.style.zIndex = '3';
 
-      var modalWindowHeader = document.createElement('p');
-      modalWindowHeader.style.fontSize = HEADER_TEXT_SIZE + 'px';
-      modalWindowHeader.style.color = HEADER_COLOR;
-      modalWindowHeader.style.textAlign = 'center';
-      modalWindowHeader.textContent = header;
+      var header = document.createElement('p');
+      header.style.fontSize = HEADER_SIZE + 'px';
+      header.style.color = HEADER_COLOR;
+      header.style.textAlign = 'center';
+      header.textContent = headerText;
 
-      var modalWindowText = document.createElement('p');
-      modalWindowText.style.fontSize = CONTENT_TEXT_SIZE + 'px';
-      modalWindowText.style.color = TEXT_COLOR;
-      modalWindowText.style.textAlign = 'center';
-      modalWindowText.textContent = text;
-      modalWindow.appendChild(modalWindowHeader);
-      modalWindow.appendChild(modalWindowText);
-      var bodyElement = document.body;
-      bodyElement.appendChild(modalWindow);
+      var content = document.createElement('p');
+      content.style.fontSize = CONTENT_SIZE + 'px';
+      content.style.color = TEXT_COLOR;
+      content.style.textAlign = 'center';
+      content.textContent = contentText;
+      wrapper.appendChild(header);
+      wrapper.appendChild(content);
+      document.body.appendChild(wrapper);
 
       var modalClick = function () {
         document.removeEventListener('click', modalClick);
-        bodyElement.removeChild(modalWindow);
+        document.body.removeChild(wrapper);
       };
 
       document.addEventListener('click', modalClick);
