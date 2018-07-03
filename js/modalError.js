@@ -8,7 +8,7 @@
   var WINDOW_HEADER_TEXT_SIZE = 30;
   var WINDOW_TEXT_TEXT_SIZE = 15;
 
-  window.modal = function (header, text) {
+  window.modalError = function (header, text) {
     var modalWindow = document.createElement('div');
     modalWindow.style.width = WINDOW_WIDTH + 'px';
     modalWindow.style.height = WINDOW_HEIGHT + 'px';
@@ -21,7 +21,7 @@
     modalWindow.style.left = 0;
     modalWindow.style.right = 0;
     modalWindow.style.margin = 'auto';
-    modalWindow.style.zIndex = '999';
+    modalWindow.style.zIndex = '3';
 
     var modalWindowHeader = document.createElement('p');
     modalWindowHeader.style.fontSize = WINDOW_HEADER_TEXT_SIZE + 'px';
