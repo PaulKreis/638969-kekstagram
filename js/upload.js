@@ -11,6 +11,16 @@
     descriptionArea.value = '';
   };
 
+  var showErrorMsg = function (errorMsgTxt) {
+    var errorMsgTemplate = document.querySelector('.img-upload__message--error');
+    var errorMsgElement = errorMsgTemplate.cloneNode(true);
+    errorMsgElement.innerHTML = errorMsgTxt + '<div class="error__links"> <a class="error__link" href="index.html">Попробовать снова</a> <a class="error__link" href="index.html">Загрузить другой файл</a> </div>';
+    errorMsgElement.classList.remove('hidden');
+    errorMsgElement.style.zIndex = 2;
+    var imgUpload = document.querySelector('.img-upload');
+    imgUpload.appendChild(errorMsgElement);
+  };
+
   var closeOverlay = function () {
     overlay.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
@@ -216,7 +226,7 @@
     event.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
-    window.uploadService.send(new FormData(imgEditForm), closeOverlay, window.utils.showErrorMsg);
+    window.uploadService.send(new FormData(imgEditForm), closeOverlay, showErrorMsg);
   });
 
   imgEditForm.addEventListener('invalid', function () {
