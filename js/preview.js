@@ -4,6 +4,10 @@
   var AVATAR_WIDTH = 35;
   var AVATAR_PATH = 'img/avatar';
   var AVATAR_EXT = '.svg';
+  var visibleCommentCount = 0;
+  var currentData = null;
+  var commentsElement = document.querySelector('.social__comments');
+  var bigPictureElement = document.querySelector('.big-picture');
 
   var getAvatarPath = function (avatarIndex) {
     return AVATAR_PATH + '-' + avatarIndex + AVATAR_EXT;
@@ -29,48 +33,60 @@
     return commentElement;
   };
 
-  var renderComments = function (photos) {
+  var renderComments = function (comments) {
     var commentsFragment = document.createDocumentFragment();
 
-    photos.comments.forEach(function (comment) {
+    comments.forEach(function (comment) {
       commentsFragment.appendChild(createCommentElement(comment));
     });
     return commentsFragment;
   };
 
-  var hideCommentsFeatures = function () {
-    //  Прячем блоки счётчика комментариев и загрузки новых комментариев
-    var commentCountElement = document.querySelector('.social__comment-count');
-    commentCountElement.classList.add('visually-hidden');
-    var loadMoreElement = document.querySelector('.social__loadmore');
-    loadMoreElement.classList.add('visually-hidden');
+  var open = function (bigPictureElem) {
+    bigPictureElem.classList.remove('hidden');
   };
 
-  // Отрисовка окна с крупной картинкой
-  var open = function (bigPictureElement) {
-    bigPictureElement.classList.remove('hidden');
+  var close = function (bigPictureElem) {
+    bigPictureElem.classList.add('hidden');
   };
 
-  var close = function (bigPictureElement) {
-    bigPictureElement.classList.add('hidden');
+  var commentCountElement = document.querySelector('.social__comment-count');
+  commentCountElement.classList.remove('visually-hidden');
+
+  var more = document.querySelector('.social__loadmore');
+  more.classList.remove('visually-hidden');
+
+  var checkComments = function () {
+    if (currentData.comments.length - visibleCommentCount > 5) {
+      more.classList.remove('visually-hidden');
+      window.utils.removeChildren(commentsElement);
+      visibleCommentCount += 5;
+    } else {
+      window.utils.removeChildren(commentsElement);
+      more.classList.add('visually-hidden');
+      visibleCommentCount += currentData.comments.length - visibleCommentCount;
+    }
+    var comments = currentData.comments.slice(0, visibleCommentCount);
+    commentsElement.appendChild(renderComments(comments));
+    commentCountElement.textContent = visibleCommentCount + ' из ' + currentData.comments.length + ' комментариев';
   };
+
+  more.addEventListener('click', checkComments);
 
   window.preview = {
     render: function (picture) {
-      var bigPictureElement = document.querySelector('.big-picture');
+      currentData = picture;
+      visibleCommentCount = 0;
 
       var bigPictureImg = bigPictureElement.querySelector('.big-picture__img');
       bigPictureImg.querySelector('img').src = picture.url;
       bigPictureElement.querySelector('.likes-count').textContent = picture.likes;
 
-      bigPictureElement.querySelector('.comments-count').textContent = picture.comments.length;
+      commentCountElement.textContent = '5 из ' + picture.comments.length + ' комментариев';
       bigPictureElement.querySelector('.social__caption').textContent = picture.description;
 
       open(bigPictureElement);
-      hideCommentsFeatures();
-      var commentsElement = document.querySelector('.social__comments');
-      window.utils.removeChildren(commentsElement);
-      commentsElement.appendChild(renderComments(picture));
+      checkComments();
 
       //  Закрытие окна с большой картинкой по клику на крестик
       var closeBtn = bigPictureElement.querySelector('.big-picture__cancel');
