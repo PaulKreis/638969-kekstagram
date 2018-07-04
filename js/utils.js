@@ -5,9 +5,7 @@
       return Math.round(Math.random() * (max - min) + min);
     },
     removeChildren: function (element) {
-      while (element.firstChild) {
-        element.removeChild(element.firstChild);
-      }
+      element.innerHTML = '';
     },
     getRandomSubarray: function (arr, size) {
       var shuffled = arr.slice(0);
@@ -21,6 +19,18 @@
         shuffled[i] = temp;
       }
       return shuffled.slice(0, size);
+    },
+    debounce: function (fun, interval) {
+      var lastTimeout = null;
+      return function () {
+        var args = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          fun.call(null, args);
+        }, interval);
+      };
     }
   };
 })();
