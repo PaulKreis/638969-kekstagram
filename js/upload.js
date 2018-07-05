@@ -9,6 +9,8 @@
   var formReset = function () {
     tagsInput.value = '';
     descriptionArea.value = '';
+    var noneEffectBtn = document.querySelector('#effect-none');
+    noneEffectBtn.checked = true;
   };
 
   var showErrorMsg = function (errorMsgTxt) {
@@ -152,11 +154,12 @@
   var resetSlider = function () {
     scaleLevelLine.style.width = SLIDER_MAX + 'px';
     scalePin.style.left = SLIDER_MAX + 'px';
+
   };
 
   //  Изменение масштаба
   var imgZoomValueChange = function (action) {
-    var resizeControl = overlay.querySelector('.resize__control--value');
+    var resizeControl = document.querySelector('.resize__control--value');
     var RESIZE_STEP = 25;
     var IMG_SIZE_MIN = 25;
     var IMG_SIZE_MAX = 100;

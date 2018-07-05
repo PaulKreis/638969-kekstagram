@@ -2,7 +2,8 @@
 (function () {
   window.enums = {
     KeyCode: {
-      ESC: 27
+      ESC: 27,
+      ENTER: 13
     },
     HttpStatusName: {
       // Informational 1xx

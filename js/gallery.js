@@ -28,6 +28,12 @@
     pictureImg.addEventListener('click', function () {
       window.preview.render(photo);
     });
+    pictureImg.addEventListener('keydown', function (evt) {
+      console.log('Enter');
+      if (evt.keyCode === window.enums.KeyCode.ENTER) {
+        window.preview.render(photo);
+      }
+    });
   };
 
   var init = function (photos) {
