@@ -41,7 +41,7 @@
       discussedButton.classList.remove('img-filters__button--active');
       popularButton.classList.remove('img-filters__button--active');
       newButton.classList.remove('img-filters__button--active');
-
+      newArr = photos.slice();
       switch (evt.target.id) {
         case 'filter-popular':
           newArr = photos.slice();
