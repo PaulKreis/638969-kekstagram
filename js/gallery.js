@@ -1,14 +1,14 @@
 'use strict';
 (function () {
   var pictureTemplate = document.querySelector('#picture').content;
-  var imgFilter = document.querySelector('.img-filters');
+  var imgFilters = document.querySelector('.img-filters');
   var loadedPhotos = [];
   var clearGallery = function () {
     var imgs = document.querySelectorAll('.picture__link');
+    var pictures = document.querySelector('.pictures');
     for (var i = 0; i < imgs.length; i++) {
-      var pictures = document.querySelector('.pictures');
-      var img = document.querySelector('.picture__link');
-      pictures.removeChild(img);
+      var pictureLink = document.querySelector('.picture__link');
+      pictures.removeChild(pictureLink);
     }
   };
 
@@ -45,7 +45,6 @@
   });
 
   var filterPhotos = function (filterName) {
-    var filteredPhotos = [];
     var filterPopular = document.querySelector('#filter-popular');
     var filterNew = document.querySelector('#filter-new');
     var filterDiscussed = document.querySelector('#filter-discussed');
@@ -53,14 +52,14 @@
     filterDiscussed.classList.remove('img-filters__button--active');
     filterPopular.classList.remove('img-filters__button--active');
     filterNew.classList.remove('img-filters__button--active');
-    filteredPhotos = loadedPhotos.slice();
+    var filteredPhotos = loadedPhotos.slice();
     switch (filterName) {
       case 'filter-popular':
         filteredPhotos = loadedPhotos.slice();
         filterPopular.classList.add('img-filters__button--active');
         break;
       case 'filter-new':
-        filteredPhotos = window.utils.getRandomSubarray(loadedPhotos, 10);
+        filteredPhotos = window.utils.getRandomSubArray(loadedPhotos, 10);
         filterNew.classList.add('img-filters__button--active');
         break;
       case 'filter-discussed':
@@ -78,14 +77,14 @@
   };
   var onLoadSuccess = function (photos) {
     loadedPhotos = photos;
-    imgFilter.classList.remove('img-filters--inactive');
+    imgFilters.classList.remove('img-filters--inactive');
     var filterForm = document.querySelector('.img-filters__form');
     filterForm.addEventListener('click', onFilterClick);
     render(loadedPhotos, document.querySelector('.pictures'));
   };
 
-  var onLoadError = function (header, msg) {
-    window.modalError.render(header, msg);
+  var onLoadError = function (header, message) {
+    window.modalError.render(header, message);
   };
 
   window.gallery = {

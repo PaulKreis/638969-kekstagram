@@ -36,12 +36,12 @@
       wrapper.appendChild(content);
       document.body.appendChild(wrapper);
 
-      var modalClick = function () {
-        document.removeEventListener('click', modalClick);
+      var onModalClick = function () {
+        document.removeEventListener('click', onModalClick);
         document.body.removeChild(wrapper);
       };
 
-      document.addEventListener('click', modalClick);
+      document.addEventListener('click', onModalClick);
     }
   };
 })();
