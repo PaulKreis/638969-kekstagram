@@ -20,7 +20,7 @@
       }
       return shuffled.slice(0, size);
     },
-    debounce: function (fun, interval) {
+    debounce: function (fn, interval) {
       var lastTimeout = null;
       return function () {
         var args = arguments;
@@ -28,7 +28,7 @@
           window.clearTimeout(lastTimeout);
         }
         lastTimeout = window.setTimeout(function () {
-          fun.call(null, args);
+          fn.call(null, args);
         }, interval);
       };
     },

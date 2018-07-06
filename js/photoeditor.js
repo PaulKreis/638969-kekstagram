@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  window.photoeditor = {
+  window.photoEditor = {
     setIntensity: function (filterName) {
       var scaleValue = document.querySelector('.scale__value');
       var filter = '';
@@ -33,7 +33,7 @@
       window.upload.targetImage.style.filter = filter;
     },
     setEffect: function (effectName) {
-      window.photoeditor.resetIntensity();
+      window.photoEditor.resetIntensity();
       window.upload.resetSlider();
       var controlScale = window.upload.overlay.querySelector('.img-upload__scale');
       window.upload.targetImage.classList.remove('effects__preview--' + window.upload.currentEffectName);

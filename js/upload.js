@@ -26,7 +26,7 @@
 
   var onScaleLineClick = function (ev) {
     updateSlider(ev.offsetX);
-    window.photoeditor.setIntensity(window.upload.currentEffectName);
+    window.photoEditor.setIntensity(window.upload.currentEffectName);
   };
   scaleLine.addEventListener('mouseup', onScaleLineClick);
 
@@ -47,12 +47,12 @@
       };
       var shiftScale = (scalePin.offsetLeft - shift.x);
       updateSlider(shiftScale);
-      window.photoeditor.setIntensity(window.upload.currentEffectName);
+      window.photoEditor.setIntensity(window.upload.currentEffectName);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      window.photoeditor.setIntensity(window.upload.currentEffectName);
+      window.photoEditor.setIntensity(window.upload.currentEffectName);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       scaleLine.addEventListener('mouseup', onScaleLineClick);
@@ -208,8 +208,8 @@
       window.upload.file.addEventListener('change', window.upload.openOverlay);
       window.upload.overlay.addEventListener('click', function (evt) {
         if (evt.target.name === 'effect') {
-          window.photoeditor.setEffect(evt.target.value);
-          window.photoeditor.setIntensity(evt.target.value);
+          window.photoEditor.setEffect(evt.target.value);
+          window.photoEditor.setIntensity(evt.target.value);
         }
       });
     },
@@ -217,7 +217,7 @@
       window.upload.overlay.classList.remove('hidden');
       document.addEventListener('keydown', onDocumentKeydown);
       imgZoomValueChange('default');
-      window.photoeditor.setEffect('none');
+      window.photoEditor.setEffect('none');
     },
     calculateProportion: function () {
       var scaleLineWidth = scaleLine.offsetWidth;
