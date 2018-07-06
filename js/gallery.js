@@ -79,7 +79,8 @@
   var onLoadSuccess = function (photos) {
     loadedPhotos = photos;
     imgFilter.classList.remove('img-filters--inactive');
-    imgFilter.addEventListener('click', onFilterClick);
+    var filterForm = document.querySelector('.img-filters__form');
+    filterForm.addEventListener('click', onFilterClick);
     render(loadedPhotos, document.querySelector('.pictures'));
   };
 
