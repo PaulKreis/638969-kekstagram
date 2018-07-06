@@ -9,12 +9,12 @@
 
   var controlPlus = document.querySelector('.resize__control--plus');
   controlPlus.addEventListener('click', function () {
-    window.photoEditor.imgZoomValueChange('increase');
+    window.photoEditor.changeImgZoomValue('increase');
   });
 
   var controlMinus = document.querySelector('.resize__control--minus');
   controlMinus.addEventListener('click', function () {
-    window.photoEditor.imgZoomValueChange('decrease');
+    window.photoEditor.changeImgZoomValue('decrease');
   });
   var calculateProportion = function () {
     var scaleLineWidth = scaleLine.offsetWidth;
@@ -124,7 +124,7 @@
         controlScale.classList.remove('hidden');
       }
     },
-    imgZoomValueChange: function (action) {
+    changeImgZoomValue: function (action) {
       var resizeControl = document.querySelector('.resize__control--value');
       var resizeValue = parseInt(resizeControl.value, 10);
 

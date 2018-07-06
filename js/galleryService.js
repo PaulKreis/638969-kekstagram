@@ -1,9 +1,9 @@
 'use strict';
 (function () {
+  var URL = 'https://js.dump.academy/kekstagram/data';
+  var XHR_TIMEOUT = 10000;
   window.galleryService = {
     load: function (onSuccess, onError) {
-      var URL = 'https://js.dump.academy/kekstagram/data';
-      var XHR_TIMEOUT = 10000;
 
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';

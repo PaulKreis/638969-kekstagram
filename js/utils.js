@@ -7,7 +7,7 @@
     removeChildren: function (element) {
       element.innerHTML = '';
     },
-    getRandomSubarray: function (arr, size) {
+    getRandomSubArray: function (arr, size) {
       var shuffled = arr.slice(0);
       var i = arr.length;
       var temp;
@@ -32,10 +32,10 @@
         }, interval);
       };
     },
-    checkContains: function (arr, elem) {
+    checkContains: function (arr, element) {
       var numberOfElem = 0;
       for (var i = 0; i < arr.length; i++) {
-        if (arr[i].toUpperCase() === elem.toUpperCase()) {
+        if (arr[i].toUpperCase() === element.toUpperCase()) {
           numberOfElem++;
         }
       }
