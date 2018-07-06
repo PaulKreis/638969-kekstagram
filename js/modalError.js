@@ -2,8 +2,8 @@
 (function () {
   var WIDTH = 700;
   var HEIGHT = 155;
-  var headerSize = 30;
-  var contentSize = 15;
+  var HEADER_SIZE = 30;
+  var CONTENT_SIZE = 15;
 
   window.modalError = {
     render: function (headerText, contentText) {
@@ -22,13 +22,13 @@
       wrapper.style.zIndex = '3';
 
       var header = document.createElement('p');
-      header.style.fontSize = headerSize + 'px';
+      header.style.fontSize = HEADER_SIZE + 'px';
       header.style.color = 'black';
       header.style.textAlign = 'center';
       header.textContent = headerText;
 
       var content = document.createElement('p');
-      content.style.fontSize = contentSize + 'px';
+      content.style.fontSize = CONTENT_SIZE + 'px';
       content.style.color = 'black';
       content.style.textAlign = 'center';
       content.textContent = contentText;
