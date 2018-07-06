@@ -1,112 +1,22 @@
 'use strict';
 (function () {
-  var SLIDER_MAX = 453;
-  var SLIDER_MIN = 0;
 
   var formReset = function () {
     tagsInput.value = '';
     descriptionArea.value = '';
-    var noneEffectBtn = document.querySelector('#effect-none');
-    noneEffectBtn.checked = true;
+    var noneEffect = document.querySelector('#effect-none');
+    noneEffect.checked = true;
   };
 
   var showErrorMsg = function (errorMsgTxt) {
     var errorMsgTemplate = document.querySelector('.img-upload__message--error');
-    var errorMsgElement = errorMsgTemplate.cloneNode(true);
-    errorMsgElement.innerHTML = errorMsgTxt + '<div class="error__links"> <a class="error__link" href="index.html">Попробовать снова</a> <a class="error__link" href="index.html">Загрузить другой файл</a> </div>';
-    errorMsgElement.classList.remove('hidden');
-    errorMsgElement.style.zIndex = 2;
+    var errorMsg = errorMsgTemplate.cloneNode(true);
+    errorMsg.innerHTML = errorMsgTxt + '<div class="error__links"> <a class="error__link" href="index.html">Попробовать снова</a> <a class="error__link" href="index.html">Загрузить другой файл</a> </div>';
+    errorMsg.classList.remove('hidden');
+    errorMsg.style.zIndex = 2;
     var imgUpload = document.querySelector('.img-upload');
-    imgUpload.appendChild(errorMsgElement);
+    imgUpload.appendChild(errorMsg);
   };
-  //  Обработка слайдера эффекта
-  var scalePin = document.querySelector('.scale__pin');
-  var scaleLevelLine = document.querySelector('.scale__level');
-  var scaleLine = document.querySelector('.scale__line');
-
-  var onScaleLineClick = function (ev) {
-    updateSlider(ev.offsetX);
-    window.photoEditor.setIntensity(window.upload.currentEffectName);
-  };
-  scaleLine.addEventListener('mouseup', onScaleLineClick);
-
-  scalePin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
-
-    var startCoords = {
-      x: evt.clientX,
-    };
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-      };
-      startCoords = {
-        x: moveEvt.clientX,
-      };
-      var shiftScale = (scalePin.offsetLeft - shift.x);
-      updateSlider(shiftScale);
-      window.photoEditor.setIntensity(window.upload.currentEffectName);
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-      window.photoEditor.setIntensity(window.upload.currentEffectName);
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      scaleLine.addEventListener('mouseup', onScaleLineClick);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    scaleLine.removeEventListener('mouseup', onScaleLineClick);
-  });
-
-  var updateSlider = function (shift) {
-    if (shift > SLIDER_MIN && shift <= SLIDER_MAX) {
-      scaleLevelLine.style.width = shift + 'px';
-      scalePin.style.left = shift + 'px';
-    }
-  };
-
-  //  Изменение масштаба изображения
-  var imgZoomValueChange = function (action) {
-    var resizeControl = document.querySelector('.resize__control--value');
-    var RESIZE_STEP = 25;
-    var IMG_SIZE_MIN = 25;
-    var IMG_SIZE_MAX = 100;
-    var DEFAULT_ZOOM = 100;
-    var resizeValue = parseInt(resizeControl.value, 10);
-
-    switch (action) {
-      case 'increase' :
-        if (resizeValue < IMG_SIZE_MAX) {
-          resizeValue += RESIZE_STEP;
-        }
-        break;
-      case 'decrease' :
-        if (resizeValue > IMG_SIZE_MIN) {
-          resizeValue -= RESIZE_STEP;
-        }
-        break;
-      case 'default' :
-        resizeValue = DEFAULT_ZOOM;
-        break;
-    }
-    window.upload.targetImage.style.transform = 'scale(' + resizeValue / 100 + ')';
-    resizeControl.value = resizeValue + '%';
-  };
-
-  var controlPlus = document.querySelector('.resize__control--plus');
-  controlPlus.addEventListener('click', function () {
-    imgZoomValueChange('increase');
-  });
-
-  var controlMinus = document.querySelector('.resize__control--minus');
-  controlMinus.addEventListener('click', function () {
-    imgZoomValueChange('decrease');
-  });
 
   //  Закрытие окна по крестику и ESC
   var cancel = document.getElementById('upload-cancel');
@@ -189,8 +99,8 @@
   };
 
   //  Отправка формы
-  var submitButton = document.querySelector('.img-upload__submit');
-  submitButton.addEventListener('click', function () {
+  var submit = document.querySelector('.img-upload__submit');
+  submit.addEventListener('click', function () {
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
   });
@@ -216,17 +126,8 @@
     openOverlay: function () {
       window.upload.overlay.classList.remove('hidden');
       document.addEventListener('keydown', onDocumentKeydown);
-      imgZoomValueChange('default');
+      window.photoEditor.imgZoomValueChange('default');
       window.photoEditor.setEffect('none');
-    },
-    calculateProportion: function () {
-      var scaleLineWidth = scaleLine.offsetWidth;
-      var pinX = scalePin.offsetLeft;
-      return (pinX / scaleLineWidth);
-    },
-    resetSlider: function () {
-      scaleLevelLine.style.width = SLIDER_MAX + 'px';
-      scalePin.style.left = SLIDER_MAX + 'px';
     },
     overlay: document.querySelector('.img-upload__overlay'),
     file: document.getElementById('upload-file'),

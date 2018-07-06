@@ -1,5 +1,5 @@
 'use strict';
 (function () {
-  window.gallery.load();
+  window.gallery.init();
   window.upload.init();
 })();
