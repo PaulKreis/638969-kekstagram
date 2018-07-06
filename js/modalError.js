@@ -2,18 +2,15 @@
 (function () {
   var WIDTH = 700;
   var HEIGHT = 155;
-  var BACKGROUND = 'white';
-  var HEADER_COLOR = 'black';
-  var TEXT_COLOR = 'black';
-  var HEADER_SIZE = 30;
-  var CONTENT_SIZE = 15;
+  var headerSize = 30;
+  var contentSize = 15;
 
   window.modalError = {
     render: function (headerText, contentText) {
       var wrapper = document.createElement('div');
       wrapper.style.width = WIDTH + 'px';
       wrapper.style.height = HEIGHT + 'px';
-      wrapper.style.background = BACKGROUND;
+      wrapper.style.background = 'white';
       wrapper.style.border = 'solid red 5px';
       wrapper.style.borderRadius = '5px';
       wrapper.style.position = 'absolute';
@@ -25,14 +22,14 @@
       wrapper.style.zIndex = '3';
 
       var header = document.createElement('p');
-      header.style.fontSize = HEADER_SIZE + 'px';
-      header.style.color = HEADER_COLOR;
+      header.style.fontSize = headerSize + 'px';
+      header.style.color = 'black';
       header.style.textAlign = 'center';
       header.textContent = headerText;
 
       var content = document.createElement('p');
-      content.style.fontSize = CONTENT_SIZE + 'px';
-      content.style.color = TEXT_COLOR;
+      content.style.fontSize = contentSize + 'px';
+      content.style.color = 'black';
       content.style.textAlign = 'center';
       content.textContent = contentText;
       wrapper.appendChild(header);

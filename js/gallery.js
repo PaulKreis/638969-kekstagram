@@ -14,6 +14,7 @@
 
   var render = function (photos, target) {
     clearGallery();
+    console.log(photos);
     var picturesFragment = document.createDocumentFragment();
 
     photos.forEach(function (photo) {
@@ -39,7 +40,12 @@
       }
     });
   };
-  var filterPhotos = function (evt) {
+
+  var debouncedRender = window.utils.debounce(function (photos) {
+    render(photos, document.querySelector('.pictures'));
+  });
+
+  var filterPhotos = function (filterName) {
     var filteredPhotos = [];
     var filterPopular = document.querySelector('#filter-popular');
     var filterNew = document.querySelector('#filter-new');
@@ -49,7 +55,7 @@
     filterPopular.classList.remove('img-filters__button--active');
     filterNew.classList.remove('img-filters__button--active');
     filteredPhotos = loadedPhotos.slice();
-    switch (evt.target.id) {
+    switch (filterName) {
       case 'filter-popular':
         filteredPhotos = loadedPhotos.slice();
         filterPopular.classList.add('img-filters__button--active');
@@ -66,18 +72,16 @@
         filterDiscussed.classList.add('img-filters__button--active');
         break;
     }
-    window.utils.debounce(function () {
-      render(filteredPhotos, document.querySelector('.pictures'));
-    }, 300)();
+    debouncedRender(filteredPhotos);
   };
-  var onFilterPress = function (evt) {
-    filterPhotos(evt);
+  var onFilterClick = function (evt) {
+    filterPhotos(evt.target.id);
   };
   var onLoadSuccess = function (photos) {
-    loadedPhotos = photos.slice();
+    loadedPhotos = photos;
     imgFilter.classList.remove('img-filters--inactive');
-    imgFilter.addEventListener('click', onFilterPress);
-    render(photos, document.querySelector('.pictures'));
+    imgFilter.addEventListener('click', onFilterClick);
+    render(loadedPhotos, document.querySelector('.pictures'));
   };
 
   var onLoadError = function (header, msg) {
