@@ -26,10 +26,10 @@
 
     var commentText = document.createElement('p');
     commentText.className = 'social__text';
-    commentText.textContent = comment;
+    commentText.textContent = commentContent;
 
     сomment.appendChild(avatarImg);
-    сomment.appendChild(commentContent);
+    сomment.appendChild(commentText);
     return сomment;
   };
 
@@ -48,7 +48,7 @@
 
   var close = function (modal) {
     modal.classList.add('hidden');
-    body.classList.remove('modal-open');
+    document.body.classList.remove('modal-open');
   };
 
   var commentCount = document.querySelector('.social__comment-count');

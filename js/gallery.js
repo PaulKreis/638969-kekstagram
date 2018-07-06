@@ -14,7 +14,6 @@
 
   var render = function (photos, target) {
     clearGallery();
-    console.log(photos);
     var picturesFragment = document.createDocumentFragment();
 
     photos.forEach(function (photo) {
