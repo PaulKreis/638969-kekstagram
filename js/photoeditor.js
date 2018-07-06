@@ -2,7 +2,7 @@
 (function () {
   window.photoeditor = {
     setIntensity: function (filterName) {
-      var scaleValue = window.upload.overlay.querySelector('.scale__value');
+      var scaleValue = document.querySelector('.scale__value');
       var filter = '';
       var intense;
       switch (filterName) {
@@ -19,7 +19,7 @@
           filter = 'invert(' + intense + '%)';
           break;
         case 'phobos' :
-          intense = window.upload.calculateProportion().toFixed(3) * 3;
+          intense = window.upload.calculateProportion().toFixed(2) * 3;
           filter = 'blur(' + intense + 'px)';
           break;
         case 'heat' :
@@ -29,7 +29,7 @@
         default :
           filter = 'none';
       }
-      scaleValue.textContent = intense;
+      scaleValue.value = window.upload.calculateProportion().toFixed(1) * 100;;
       window.upload.targetImage.style.filter = filter;
     },
     setEffect: function (effectName) {
