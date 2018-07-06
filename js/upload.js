@@ -26,7 +26,7 @@
 
   var onScaleLineClick = function (ev) {
     updateSlider(ev.offsetX);
-    window.uploadimageprocessing.setIntensity(window.upload.currentEffectName);
+    window.photoeditor.setIntensity(window.upload.currentEffectName);
   };
   scaleLine.addEventListener('mouseup', onScaleLineClick);
 
@@ -47,12 +47,12 @@
       };
       var shiftScale = (scalePin.offsetLeft - shift.x);
       updateSlider(shiftScale);
-      window.uploadimageprocessing.setIntensity(window.upload.currentEffectName);
+      window.photoeditor.setIntensity(window.upload.currentEffectName);
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-      window.uploadimageprocessing.setIntensity(window.upload.currentEffectName);
+      window.photoeditor.setIntensity(window.upload.currentEffectName);
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
       scaleLine.addEventListener('mouseup', onScaleLineClick);
@@ -195,8 +195,8 @@
     checkTags(tagsArray);
   });
 
-  imgEditForm.addEventListener('submit', function () {
-    event.preventDefault();
+  imgEditForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
     window.uploadService.send(new FormData(imgEditForm), closeOverlay, showErrorMsg);
@@ -206,10 +206,10 @@
   window.upload = {
     init: function () {
       window.upload.file.addEventListener('change', window.upload.openOverlay);
-      window.upload.overlay.addEventListener('click', function () {
-        if (event.target.name === 'effect') {
-          window.uploadimageprocessing.setEffect(event.target.value);
-          window.uploadimageprocessing.setIntensity(event.target.value);
+      window.upload.overlay.addEventListener('click', function (evt) {
+        if (evt.target.name === 'effect') {
+          window.photoeditor.setEffect(evt.target.value);
+          window.photoeditor.setIntensity(evt.target.value);
         }
       });
     },
@@ -217,7 +217,7 @@
       window.upload.overlay.classList.remove('hidden');
       document.addEventListener('keydown', onDocumentKeydown);
       imgZoomValueChange('default');
-      window.uploadimageprocessing.setEffect('none');
+      window.photoeditor.setEffect('none');
     },
     calculateProportion: function () {
       var scaleLineWidth = scaleLine.offsetWidth;

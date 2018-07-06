@@ -93,8 +93,8 @@
       closeBtn.addEventListener('click', function () {
         close(bigPictureElement);
       });
-      document.addEventListener('keydown', function () {
-        if (event.keyCode === window.enums.KeyCode.ESC) {
+      document.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === window.enums.KeyCode.ESC) {
           close(bigPictureElement);
         }
       });

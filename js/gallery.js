@@ -3,14 +3,6 @@
   var pictureTemplate = document.querySelector('#picture').content;
   var imgFilter = document.querySelector('.img-filters');
 
-  var onLoadSuccess = function (photos) {
-    init(photos, document.querySelector('.pictures'));
-  };
-
-  var onLoadError = function (header, msg) {
-    window.modalError.render(header, msg);
-  };
-
   var clearGallery = function () {
     var imgs = document.querySelectorAll('.picture__link');
     for (var i = 0; i < imgs.length; i++) {
@@ -74,6 +66,15 @@
     imgFilter.addEventListener('click', filterRender);
     window.gallery.render(photos, document.querySelector('.pictures'));
   };
+
+  var onLoadSuccess = function (photos) {
+    init(photos, document.querySelector('.pictures'));
+  };
+
+  var onLoadError = function (header, msg) {
+    window.modalError.render(header, msg);
+  };
+
   window.gallery = {
     render: function (photos, target) {
       clearGallery();
