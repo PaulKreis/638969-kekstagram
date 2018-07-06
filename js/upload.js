@@ -196,7 +196,7 @@
   });
 
   imgEditForm.addEventListener('submit', function (evt) {
-    //evt.preventDefault();
+    evt.preventDefault();
     var tagsArray = tagsInput.value.split(' ');
     checkTags(tagsArray);
     window.uploadService.send(new FormData(imgEditForm), closeOverlay, showErrorMsg);
