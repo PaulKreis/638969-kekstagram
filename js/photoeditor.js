@@ -29,7 +29,7 @@
         default :
           filter = 'none';
       }
-      scaleValue.value = window.upload.calculateProportion().toFixed(1) * 100;;
+      scaleValue.value = window.upload.calculateProportion().toFixed(2) * 100;;
       window.upload.targetImage.style.filter = filter;
     },
     setEffect: function (effectName) {
