@@ -28,7 +28,7 @@
           window.clearTimeout(lastTimeout);
         }
         lastTimeout = window.setTimeout(function () {
-          fn.call(null, args);
+          fn.apply(null, args);
         }, interval);
       };
     },

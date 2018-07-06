@@ -2,6 +2,10 @@
 (function () {
   var SLIDER_MAX = 453;
   var SLIDER_MIN = 0;
+  var RESIZE_STEP = 25;
+  var IMG_SIZE_MIN = 25;
+  var IMG_SIZE_MAX = 100;
+  var DEFAULT_ZOOM = 100;
 
   var controlPlus = document.querySelector('.resize__control--plus');
   controlPlus.addEventListener('click', function () {
@@ -104,8 +108,11 @@
       scaleValue.value = calculateProportion().toFixed(2) * 100;
       window.upload.targetImage.style.filter = filter;
     },
+    resetIntensity: function () {
+      window.upload.targetImage.style.filter = '';
+    },
     setEffect: function (effectName) {
-      window.photoEditor.resetIntensity();
+      this.resetIntensity();
       resetSlider();
       var controlScale = window.upload.overlay.querySelector('.img-upload__scale');
       window.upload.targetImage.classList.remove('effects__preview--' + window.upload.currentEffectName);
@@ -117,15 +124,8 @@
         controlScale.classList.remove('hidden');
       }
     },
-    resetIntensity: function () {
-      window.upload.targetImage.style.filter = '';
-    },
     imgZoomValueChange: function (action) {
       var resizeControl = document.querySelector('.resize__control--value');
-      var RESIZE_STEP = 25;
-      var IMG_SIZE_MIN = 25;
-      var IMG_SIZE_MAX = 100;
-      var DEFAULT_ZOOM = 100;
       var resizeValue = parseInt(resizeControl.value, 10);
 
       switch (action) {
