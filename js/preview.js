@@ -8,6 +8,7 @@
   var currentData = null;
   var commentsElement = document.querySelector('.social__comments');
   var bigPictureElement = document.querySelector('.big-picture');
+  var body = document.querySelector('body');
 
   var getAvatarPath = function (avatarIndex) {
     return AVATAR_PATH + '-' + avatarIndex + AVATAR_EXT;
@@ -48,6 +49,7 @@
 
   var close = function (bigPictureElem) {
     bigPictureElem.classList.add('hidden');
+    body.classList.remove('modal-open');
   };
 
   var commentCountElement = document.querySelector('.social__comment-count');
@@ -75,6 +77,7 @@
 
   window.preview = {
     render: function (picture) {
+      body.classList.add('modal-open');
       currentData = picture;
       visibleCommentCount = 0;
 
