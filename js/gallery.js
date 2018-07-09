@@ -6,10 +6,10 @@
   var clearGallery = function () {
     var imgs = document.querySelectorAll('.picture__link');
     var pictures = document.querySelector('.pictures');
-    for (var i = 0; i < imgs.length; i++) {
+    imgs.forEach(function () {
       var pictureLink = document.querySelector('.picture__link');
       pictures.removeChild(pictureLink);
-    }
+    });
   };
 
   var render = function (photos, target) {
@@ -30,14 +30,17 @@
     picture.querySelector('.picture__stat--likes').textContent = photo.likes;
     picture.querySelector('.picture__stat--comments').textContent = photo.comments.length;
     picturesFragment.appendChild(picture);
-    pictureLink.addEventListener('click', function () {
+
+    var onPictureLinkClick = function () {
       window.preview.render(photo);
-    });
-    pictureLink.addEventListener('keydown', function (evt) {
+    };
+    var onPictureLinkPress = function (evt) {
       if (evt.keyCode === window.enums.KeyCode.ENTER) {
-        window.preview.render(photo);
+        onPictureLinkClick();
       }
-    });
+    };
+    pictureLink.addEventListener('click', onPictureLinkClick);
+    pictureLink.addEventListener('keydown', onPictureLinkPress);
   };
 
   var debouncedRender = window.utils.debounce(function (photos) {
