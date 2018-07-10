@@ -5,6 +5,7 @@
   var AVATAR_PATH = 'img/avatar';
   var AVATAR_EXT = '.svg';
   var visibleCommentCount = 0;
+  var commentsLoaded = 5;
   var currentData = null;
   var socialComments = document.querySelector('.social__comments');
   var bigPicture = document.querySelector('.big-picture');
@@ -44,6 +45,7 @@
 
   var open = function (modal) {
     modal.classList.remove('hidden');
+    more.addEventListener('click', onMoreClick);
   };
 
   var close = function (modal) {
@@ -57,11 +59,15 @@
   var more = document.querySelector('.social__loadmore');
   more.classList.remove('visually-hidden');
 
+  var onMoreClick = function () {
+    checkComments();
+  };
+
   var checkComments = function () {
-    if (currentData.comments.length - visibleCommentCount > 5) {
+    if (currentData.comments.length - visibleCommentCount > commentsLoaded) {
       more.classList.remove('visually-hidden');
       window.utils.removeChildren(socialComments);
-      visibleCommentCount += 5;
+      visibleCommentCount += commentsLoaded;
     } else {
       window.utils.removeChildren(socialComments);
       more.classList.add('visually-hidden');
@@ -71,8 +77,6 @@
     socialComments.appendChild(renderComments(comments));
     commentCount.textContent = visibleCommentCount + ' из ' + currentData.comments.length + ' комментариев';
   };
-
-  more.addEventListener('click', checkComments);
 
   window.preview = {
     render: function (picture) {
@@ -92,14 +96,20 @@
 
       //  Закрытие окна с большой картинкой по клику на крестик
       var closeBtn = bigPicture.querySelector('.big-picture__cancel');
-      closeBtn.addEventListener('click', function () {
+      var onCloseBtnClick = function () {
         close(bigPicture);
-      });
-      document.addEventListener('keydown', function (evt) {
+        closeBtn.removeEventListener('click', onCloseBtnClick);
+        document.removeEventListener('keydown', onBtnPress);
+        more.removeEventListener('click', onMoreClick);
+      };
+      var onBtnPress = function (evt) {
         if (evt.keyCode === window.enums.KeyCode.ESC) {
-          close(bigPicture);
+          onCloseBtnClick();
         }
-      });
+      };
+
+      closeBtn.addEventListener('click', onCloseBtnClick);
+      document.addEventListener('keydown', onBtnPress);
     }
   };
 })();

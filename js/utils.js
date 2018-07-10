@@ -34,12 +34,19 @@
     },
     checkContains: function (arr, element) {
       var numberOfElem = 0;
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i].toUpperCase() === element.toUpperCase()) {
+      arr.forEach(function (e) {
+        if (e.toUpperCase() === element.toUpperCase()) {
           numberOfElem++;
         }
-      }
+      });
       return numberOfElem;
+    },
+    isEmptyString: function (array) {
+      var checkEmptyElement = function (value) {
+        return value !== '';
+      };
+      var result = array.filter(checkEmptyElement);
+      return result;
     }
   };
 })();

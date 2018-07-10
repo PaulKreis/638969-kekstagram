@@ -6,6 +6,8 @@
   var IMG_SIZE_MIN = 25;
   var IMG_SIZE_MAX = 100;
   var DEFAULT_ZOOM = 100;
+  var PHOBOS_MAX = 3;
+  var HEAT_MAX = 3;
 
   var controlPlus = document.querySelector('.resize__control--plus');
   controlPlus.addEventListener('click', function () {
@@ -36,7 +38,7 @@
   };
   scaleLine.addEventListener('mouseup', onScaleLineClick);
 
-  scalePin.addEventListener('mousedown', function (evt) {
+  var onScalePinMousedown = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -67,7 +69,8 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     scaleLine.removeEventListener('mouseup', onScaleLineClick);
-  });
+  };
+  scalePin.addEventListener('mousedown', onScalePinMousedown);
 
   var updateSlider = function (shift) {
     if (shift > SLIDER_MIN && shift <= SLIDER_MAX) {
@@ -95,11 +98,11 @@
           filter = 'invert(' + intense + '%)';
           break;
         case 'phobos' :
-          intense = calculateProportion().toFixed(2) * 3;
+          intense = calculateProportion().toFixed(2) * PHOBOS_MAX;
           filter = 'blur(' + intense + 'px)';
           break;
         case 'heat' :
-          intense = calculateProportion().toFixed(2) * 3;
+          intense = calculateProportion().toFixed(2) * HEAT_MAX;
           filter = 'brightness(' + intense + ')';
           break;
         default :
