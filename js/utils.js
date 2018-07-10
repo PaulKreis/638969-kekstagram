@@ -40,6 +40,13 @@
         }
       });
       return numberOfElem;
+    },
+    isEmptyString: function (array) {
+      var checkEmptyElement = function (value) {
+        return value !== '';
+      };
+      var result = array.filter(checkEmptyElement);
+      return result;
     }
   };
 })();

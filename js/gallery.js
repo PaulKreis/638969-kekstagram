@@ -45,7 +45,7 @@
 
   var debouncedRender = window.utils.debounce(function (photos) {
     render(photos, document.querySelector('.pictures'));
-  });
+  }, 300);
 
   var filterPhotos = function (filterName) {
     var filterPopular = document.querySelector('#filter-popular');
