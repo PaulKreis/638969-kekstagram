@@ -129,7 +129,7 @@
   };
 
   var changeImage = function () {
-    if (checkLoadFile()) {
+    if (isFileSupported()) {
       setImageSrc();
       window.upload.openOverlay();
     } else {
@@ -147,16 +147,13 @@
     reader.readAsDataURL(file);
   };
 
-  var checkLoadFile = function () {
+  var isFileSupported = function () {
     var file = window.upload.file.files[0];
     var fileName = file.name.toLowerCase();
     var isSupported = SUPPORTED_FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
-    if (!isSupported) {
-      return false;
-    }
-    return true;
+    return isSupported;
   };
 
   //  Экспорт
