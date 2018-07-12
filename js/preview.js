@@ -4,7 +4,7 @@
   var AVATAR_WIDTH = 35;
   var AVATAR_PATH = 'img/avatar';
   var AVATAR_EXT = '.svg';
-  var COMMENTS_LOADED = 5;
+  var COMMENTS_LIMIT = 5;
   var visibleCommentCount = 0;
   var currentData = null;
   var socialComments = document.querySelector('.social__comments');
@@ -64,10 +64,10 @@
   };
 
   var checkComments = function () {
-    if (currentData.comments.length - visibleCommentCount > COMMENTS_LOADED) {
+    if (currentData.comments.length - visibleCommentCount > COMMENTS_LIMIT) {
       more.classList.remove('visually-hidden');
       window.utils.removeChildren(socialComments);
-      visibleCommentCount += COMMENTS_LOADED;
+      visibleCommentCount += COMMENTS_LIMIT;
     } else {
       window.utils.removeChildren(socialComments);
       more.classList.add('visually-hidden');
