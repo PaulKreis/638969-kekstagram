@@ -131,7 +131,7 @@
     if (checkLoadFile()) {
       window.upload.openOverlay();
     } else {
-      window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ').toString() + '.');
+      window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ') + '.');
     }
   };
 
