@@ -129,15 +129,15 @@
   };
 
   var changeImage = function (file) {
-    if (isFileSupported(file.name.toLowerCase())) {
-      setImageSrc(file);
+    if (isFileSupported(file.name)) {
+      setImageSource(file);
       window.upload.openOverlay();
     } else {
       window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ') + '.');
     }
   };
 
-  var setImageSrc = function (file) {
+  var setImageSource = function (file) {
     var previewImage = window.upload.targetImage.getElementsByTagName('img')[0];
     var reader = new FileReader();
     reader.addEventListener('load', function () {
@@ -147,8 +147,9 @@
   };
 
   var isFileSupported = function (fileName) {
-    var isSupported = SUPPORTED_FILE_TYPES.some(function (it) {
-      return fileName.endsWith(it);
+    var fileNameNormalized = fileName.toLowerCase();
+    var isSupported = SUPPORTED_FILE_TYPES.some(function (fileType) {
+      return fileNameNormalized.endsWith(fileType);
     });
     return isSupported;
   };
