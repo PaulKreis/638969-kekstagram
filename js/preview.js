@@ -4,8 +4,8 @@
   var AVATAR_WIDTH = 35;
   var AVATAR_PATH = 'img/avatar';
   var AVATAR_EXT = '.svg';
+  var COMMENTS_LOADED = 5;
   var visibleCommentCount = 0;
-  var commentsLoaded = 5;
   var currentData = null;
   var socialComments = document.querySelector('.social__comments');
   var bigPicture = document.querySelector('.big-picture');
@@ -64,10 +64,10 @@
   };
 
   var checkComments = function () {
-    if (currentData.comments.length - visibleCommentCount > commentsLoaded) {
+    if (currentData.comments.length - visibleCommentCount > COMMENTS_LOADED) {
       more.classList.remove('visually-hidden');
       window.utils.removeChildren(socialComments);
-      visibleCommentCount += commentsLoaded;
+      visibleCommentCount += COMMENTS_LOADED;
     } else {
       window.utils.removeChildren(socialComments);
       more.classList.add('visually-hidden');
