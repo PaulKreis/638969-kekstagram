@@ -129,7 +129,7 @@
   };
 
   var changeImage = function (file) {
-    if (isFileSupported()) {
+    if (isFileSupported(file.name.toLowerCase())) {
       setImageSrc(file);
       window.upload.openOverlay();
     } else {
@@ -137,8 +137,7 @@
     }
   };
 
-  var setImageSrc = function () {
-    var file = window.upload.file.files[0];
+  var setImageSrc = function (file) {
     var previewImage = window.upload.targetImage.getElementsByTagName('img')[0];
     var reader = new FileReader();
     reader.addEventListener('load', function () {
@@ -147,9 +146,7 @@
     reader.readAsDataURL(file);
   };
 
-  var isFileSupported = function () {
-    var file = window.upload.file.files[0];
-    var fileName = file.name.toLowerCase();
+  var isFileSupported = function (fileName) {
     var isSupported = SUPPORTED_FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
