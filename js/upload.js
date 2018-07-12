@@ -2,6 +2,8 @@
 (function () {
   var ERROR_ZINDEX = 2;
   var SUPPORTED_FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var targetPreview = document.querySelector('.img-upload__preview');
+  var targetImage = targetPreview.getElementsByTagName('img')[0];
 
   var resetForm = function () {
     tagsInput.value = '';
@@ -142,10 +144,10 @@
   };
 
   var setImageSource = function (file) {
-    var previewImage = window.upload.targetImage.getElementsByTagName('img')[0];
     var reader = new FileReader();
+
     reader.addEventListener('load', function () {
-      previewImage.src = reader.result;
+      targetImage.src = reader.result;
     });
     reader.readAsDataURL(file);
   };
@@ -160,9 +162,9 @@
 
   //  Экспорт
   window.upload = {
+    targetPreview: targetPreview,
     overlay: document.querySelector('.img-upload__overlay'),
     file: document.getElementById('upload-file'),
-    targetImage: document.querySelector('.img-upload__preview'),
     currentEffectName: '',
     init: function () {
       window.upload.file.addEventListener('change', function (evt) {

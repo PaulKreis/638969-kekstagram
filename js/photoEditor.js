@@ -109,17 +109,17 @@
           filter = 'none';
       }
       scaleValue.value = calculateProportion().toFixed(2) * 100;
-      window.upload.targetImage.style.filter = filter;
+      window.upload.targetPreview.style.filter = filter;
     },
     resetIntensity: function () {
-      window.upload.targetImage.style.filter = '';
+      window.upload.targetPreview.style.filter = '';
     },
     setEffect: function (effectName) {
       this.resetIntensity();
       resetSlider();
       var controlScale = window.upload.overlay.querySelector('.img-upload__scale');
-      window.upload.targetImage.classList.remove('effects__preview--' + window.upload.currentEffectName);
-      window.upload.targetImage.classList.add('effects__preview--' + effectName);
+      window.upload.targetPreview.classList.remove('effects__preview--' + window.upload.currentEffectName);
+      window.upload.targetPreview.classList.add('effects__preview--' + effectName);
       window.upload.currentEffectName = effectName;
       if (effectName === 'none') {
         controlScale.classList.add('hidden');
@@ -146,7 +146,7 @@
           resizeValue = DEFAULT_ZOOM;
           break;
       }
-      window.upload.targetImage.style.transform = 'scale(' + resizeValue / 100 + ')';
+      window.upload.targetPreview.style.transform = 'scale(' + resizeValue / 100 + ')';
       resizeControl.value = resizeValue + '%';
     }
   };
