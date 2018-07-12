@@ -127,17 +127,26 @@
   var onSubmitClick = function () {
     checkTags(tagsInput.value);
   };
-  var onUploadChange = function () {
+
+  var changeImage = function () {
     if (checkLoadFile()) {
+      setImageSrc();
       window.upload.openOverlay();
     } else {
       window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ') + '.');
     }
   };
-  var setImageSrc = function (fileName) {
+
+  var setImageSrc = function () {
+    var file = window.upload.file.files[0];
     var previewImage = window.upload.targetImage.getElementsByTagName('img')[0];
-    previewImage.src = fileName;
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      previewImage.src = reader.result;
+    });
+    reader.readAsDataURL(file);
   };
+
   var checkLoadFile = function () {
     var file = window.upload.file.files[0];
     var fileName = file.name.toLowerCase();
@@ -147,11 +156,6 @@
     if (!isSupported) {
       return false;
     }
-    var reader = new FileReader();
-    reader.addEventListener('load', function () {
-      setImageSrc(reader.result);
-    });
-    reader.readAsDataURL(file);
     return true;
   };
 
@@ -162,7 +166,9 @@
     targetImage: document.querySelector('.img-upload__preview'),
     currentEffectName: '',
     init: function () {
-      window.upload.file.addEventListener('change', onUploadChange);
+      window.upload.file.addEventListener('change', function () {
+        changeImage();
+      });
     },
     openOverlay: function () {
       window.upload.overlay.classList.remove('hidden');
