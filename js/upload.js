@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var ERROR_ZINDEX = 2;
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var resetForm = function () {
     tagsInput.value = '';
@@ -127,10 +128,34 @@
     checkTags(tagsInput.value);
   };
 
+  var checkLoadFile = function () {
+    var img = window.upload.targetImage.getElementsByTagName('img')[0];
+    var file = window.upload.file.files[0];
+    var fileName = file.name.toLowerCase();
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        img.src = reader.result;
+        window.upload.openOverlay();
+      });
+      reader.readAsDataURL(file);
+    } else {
+      window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: .gif, .jpg, .jpeg, .png');
+    }
+  };
+
   //  Экспорт
   window.upload = {
+    overlay: document.querySelector('.img-upload__overlay'),
+    file: document.getElementById('upload-file'),
+    targetImage: document.querySelector('.img-upload__preview'),
+    currentEffectName: '',
     init: function () {
-      window.upload.file.addEventListener('change', window.upload.openOverlay);
+      window.upload.file.addEventListener('change', checkLoadFile);
     },
     openOverlay: function () {
       window.upload.overlay.classList.remove('hidden');
@@ -149,12 +174,6 @@
       submit.addEventListener('click', onSubmitClick);
       imgEditForm.addEventListener('submit', onFormSubmit);
       window.upload.overlay.addEventListener('click', onOverlayClick);
-
-
-    },
-    overlay: document.querySelector('.img-upload__overlay'),
-    file: document.getElementById('upload-file'),
-    targetImage: document.querySelector('.img-upload__preview'),
-    currentEffectName: ''
+    }
   };
 })();
