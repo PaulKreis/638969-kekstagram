@@ -128,9 +128,9 @@
     checkTags(tagsInput.value);
   };
 
-  var changeImage = function () {
+  var changeImage = function (file) {
     if (isFileSupported()) {
-      setImageSrc();
+      setImageSrc(file);
       window.upload.openOverlay();
     } else {
       window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ') + '.');
@@ -163,8 +163,8 @@
     targetImage: document.querySelector('.img-upload__preview'),
     currentEffectName: '',
     init: function () {
-      window.upload.file.addEventListener('change', function () {
-        changeImage();
+      window.upload.file.addEventListener('change', function (evt) {
+        changeImage(evt.target.files[0]);
       });
     },
     openOverlay: function () {
