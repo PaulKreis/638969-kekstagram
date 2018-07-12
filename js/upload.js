@@ -129,6 +129,7 @@
   };
 
   var changeImage = function (file) {
+    //  // Проверим поддерживаемые расширения файла, если accept аттрибут на поддерживается браузером https://caniuse.com/#search=accept
     if (isFileSupported(file.name)) {
       setImageSource(file);
       window.upload.openOverlay();
