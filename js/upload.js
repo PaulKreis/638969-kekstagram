@@ -131,7 +131,7 @@
     if (checkLoadFile()) {
       window.upload.openOverlay();
     } else {
-      window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.toString());
+      window.modalError.render('Поддерживаются только картинки', 'Поддерживаемые разрешения: ' + SUPPORTED_FILE_TYPES.join(', ').toString() + '.');
     }
   };
 
@@ -142,15 +142,15 @@
     var isSupported = SUPPORTED_FILE_TYPES.some(function (it) {
       return fileName.endsWith(it);
     });
-    if (isSupported) {
-      var reader = new FileReader();
-      reader.addEventListener('load', function () {
-        previewImage.src = reader.result;
-      });
-      reader.readAsDataURL(file);
-      return true;
+    if (!isSupported) {
+      return false;
     }
-    return false;
+    var reader = new FileReader();
+    reader.addEventListener('load', function () {
+      previewImage.src = reader.result;
+    });
+    reader.readAsDataURL(file);
+    return true;    
   };
 
   //  Экспорт
